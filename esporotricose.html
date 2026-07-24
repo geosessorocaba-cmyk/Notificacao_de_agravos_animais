@@ -121,43 +121,56 @@
 
         document.getElementById('esporo-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Busca dados salvos do veterinário
+            const vet = JSON.parse(localStorage.getItem('vetData_sorocaba')) || {};
+
+            // Trava de segurança: Se não houver dados do Vet, redireciona para a tela inicial
+            if (!vet.nome || !vet.crmv || !vet.telefone || !vet.email) {
+                alert("Identificamos que os dados do Médico Veterinário estão incompletos. Você será redirecionado para a página inicial para preenchê-los.");
+                window.location.href = 'index.html';
+                return;
+            }
+
             const btn = document.getElementById('btn-submit');
             btn.disabled = true;
             btn.innerText = 'Enviando...';
 
             try {
-                const vet = JSON.parse(localStorage.getItem('vetData_sorocaba')) || {};
-
-                // 1. Gera o número da notificação no banco (ex: 417/26)
+                // 1. Gera o número da notificação
                 const { data: numNotificacao, error: errNum } = await _supabase.rpc('gerar_numero_notificacao', { p_agravo: 'esporotricose' });
-                if (errNum) throw errNum;
+                if (errNum) throw new Error("Erro ao gerar número: " + errNum.message);
 
-                // 2. Insere na tabela pai
+                // 2. Insere na tabela principal (notificacoes)
                 const { data: notif, error: errNotif } = await _supabase.from('notificacoes').insert([{
                     numero_notificacao: numNotificacao,
                     agravo: 'esporotricose',
-                    vet_nome: vet.nome, vet_crmv: vet.crmv, vet_clinica: vet.clinica,
-                    vet_endereco: vet.endereco, vet_telefone: vet.telefone, vet_email: vet.email,
+                    vet_nome: vet.nome, 
+                    vet_crmv: vet.crmv, 
+                    vet_clinica: vet.clinica || 'Não informada',
+                    vet_endereco: vet.endereco || 'Não informado', 
+                    vet_telefone: vet.telefone, 
+                    vet_email: vet.email,
                     tutor_nome: document.getElementById('tutor_nome').value,
-                    tutor_cpf: document.getElementById('tutor_cpf').value,
+                    tutor_cpf: document.getElementById('tutor_cpf').value || null,
                     tutor_endereco: document.getElementById('tutor_endereco').value,
-                    tutor_numero: document.getElementById('tutor_numero').value,
-                    tutor_complemento: document.getElementById('tutor_complemento').value,
+                    tutor_numero: document.getElementById('tutor_numero').value || null,
+                    tutor_complemento: document.getElementById('tutor_complemento').value || null,
                     tutor_bairro: document.getElementById('tutor_bairro').value,
-                    tutor_telefone: document.getElementById('tutor_telefone').value,
+                    tutor_telefone: document.getElementById('tutor_telefone').value || null,
                     animal_nome: document.getElementById('animal_nome').value,
                     animal_especie: document.getElementById('animal_especie').value,
-                    animal_raca: document.getElementById('animal_raca').value,
-                    animal_idade: document.getElementById('animal_idade').value,
+                    animal_raca: document.getElementById('animal_raca').value || null,
+                    animal_idade: document.getElementById('animal_idade').value || null,
                     animal_sexo: document.getElementById('animal_sexo').value
                 }]).select().single();
 
-                if (errNotif) throw errNotif;
+                if (errNotif) throw new Error("Erro na tabela principal: " + errNotif.message);
 
-                // Captura locais selecionados
+                // Captura checkboxes selecionados
                 const locais = Array.from(document.querySelectorAll('input[name="locais"]:checked')).map(c => c.value);
 
-                // 3. Insere dados de Esporotricose
+                // 3. Insere na tabela específica (notificacao_esporotricose)
                 const { error: errEsporo } = await _supabase.from('notificacao_esporotricose').insert([{
                     notificacao_id: notif.id,
                     distribuicao_lesoes: document.getElementById('distribuicao_lesoes').value,
@@ -166,15 +179,15 @@
                     outros_animais_com_lesoes: document.getElementById('outros_animais_com_lesoes').value,
                     coleta_amostra: document.getElementById('coleta_amostra').value,
                     tratamento_iniciado: document.getElementById('tratamento_iniciado').value,
-                    tratamento_detalhes: document.getElementById('tratamento_detalhes').value,
-                    observacoes: document.getElementById('observacoes').value
+                    tratamento_detalhes: document.getElementById('tratamento_detalhes').value || null,
+                    observacoes: document.getElementById('observacoes').value || null
                 }]);
 
-                if (errEsporo) throw errEsporo;
+                if (errEsporo) throw new Error("Erro nos dados de esporotricose: " + errEsporo.message);
 
-                alert(`Notificação número ${numNotificacao} registrada com sucesso!`);
+                alert(`Notificação nº ${numNotificacao} cadastrada com sucesso!`);
 
-                if (confirm("Deseja fazer uma nova notificação mantendo seus dados pré-preenchidos?")) {
+                if (confirm("Deseja fazer uma nova notificação?")) {
                     window.location.href = 'index.html';
                 } else {
                     window.location.reload();
@@ -182,12 +195,10 @@
 
             } catch (err) {
                 console.error(err);
-                alert("Erro ao enviar notificação. Verifique o console ou a conexão.");
+                alert("Falha no envio:\n" + err.message);
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Enviar Notificação';
             }
         });
     </script>
-</body>
-</html>
