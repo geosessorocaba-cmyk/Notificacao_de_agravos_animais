@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificação de Esporotricose - Sorocaba</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <header>
+        <h1>Notificação de Esporotricose Canina / Felina</h1>
+        <p>Prefeitura Municipal de Sorocaba / Zoonoses</p>
+    </header>
+
+    <main>
+        <form id="esporo-form">
+            <h2>Dados do Tutor</h2>
+            <div class="form-group"><label>Nome do Tutor *</label><input type="text" id="tutor_nome" required></div>
+            <div class="form-group"><label>CPF</label><input type="text" id="tutor_cpf"></div>
+            <div class="form-group"><label>Endereço (Rua/Avenida) *</label><input type="text" id="tutor_endereco" required></div>
+            <div class="form-group"><label>Número</label><input type="text" id="tutor_numero"></div>
+            <div class="form-group"><label>Complemento</label><input type="text" id="tutor_complemento"></div>
+            <div class="form-group"><label>Bairro *</label><input type="text" id="tutor_bairro" required></div>
+            <div class="form-group"><label>Telefone do Tutor</label><input type="tel" id="tutor_telefone"></div>
+
+            <h2>Dados do Animal</h2>
+            <div class="form-group"><label>Nome do Animal *</label><input type="text" id="animal_nome" required></div>
+            <div class="form-group">
+                <label>Espécie *</label>
+                <select id="animal_especie" required>
+                    <option value="FELINA">Felina</option>
+                    <option value="CANINA">Canina</option>
+                    <option value="OUTRO">Outro</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Raça</label><input type="text" id="animal_raca"></div>
+            <div class="form-group"><label>Idade</label><input type="text" id="animal_idade"></div>
+            <div class="form-group">
+                <label>Sexo</label>
+                <select id="animal_sexo">
+                    <option value="MACHO">Macho</option>
+                    <option value="FÊMEA">Fêmea</option>
+                </select>
+            </div>
+
+            <h2>Dados Clínicos da Esporotricose</h2>
+            <div class="form-group">
+                <label>Distribuição das Lesões *</label>
+                <select id="distribuicao_lesoes" required>
+                    <option value="Única">Única</option>
+                    <option value="Múltipla (até 5)">Múltipla (até 5)</option>
+                    <option value="Disseminada (acima de 5)">Disseminada (acima de 5)</option>
+                    <option value="Sem lesão aparente">Sem lesão aparente</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Locais Predominantes das Lesões</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" name="locais" value="Cabeça"> Cabeça</label>
+                    <label class="checkbox-item"><input type="checkbox" name="locais" value="Corpo"> Corpo</label>
+                    <label class="checkbox-item"><input type="checkbox" name="locais" value="Membros anteriores"> Membros anteriores</label>
+                    <label class="checkbox-item"><input type="checkbox" name="locais" value="Membros posteriores"> Membros posteriores</label>
+                    <label class="checkbox-item"><input type="checkbox" name="locais" value="Cauda"> Cauda</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Há pessoas na residência com lesões de pele?</label>
+                <select id="humanos_com_lesoes">
+                    <option value="Não">Não</option>
+                    <option value="Sim">Sim</option>
+                    <option value="Não sei informar">Não sei informar</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Outros animais com lesões?</label>
+                <select id="outros_animais_com_lesoes">
+                    <option value="Não">Não</option>
+                    <option value="Sim">Sim</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Coleta de amostra para exame diagnóstico</label>
+                <select id="coleta_amostra">
+                    <option value="Não, solicito coleta pela Zoonoses">Não, solicito coleta pela Zoonoses</option>
+                    <option value="Sim, por laboratório particular">Sim, por laboratório particular</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Tratamento já foi iniciado?</label>
+                <select id="tratamento_iniciado">
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Se sim, qual medicamento e data de início?</label>
+                <textarea id="tratamento_detalhes" rows="2"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Observações</label>
+                <textarea id="observacoes" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary" id="btn-submit">Enviar Notificação</button>
+        </form>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+        const SUPABASE_URL = 'https://iwohicnazfxtysetelpz.supabase.co/rest/v1/';
+        const SUPABASE_KEY = 'sb_publishable_GGf9M-DxA2z433f4susohA_uscodfJp';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        document.getElementById('esporo-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit');
+            btn.disabled = true;
+            btn.innerText = 'Enviando...';
+
+            try {
+                const vet = JSON.parse(localStorage.getItem('vetData_sorocaba')) || {};
+
+                // 1. Gera o número da notificação no banco (ex: 417/26)
+                const { data: numNotificacao, error: errNum } = await _supabase.rpc('gerar_numero_notificacao', { p_agravo: 'esporotricose' });
+                if (errNum) throw errNum;
+
+                // 2. Insere na tabela pai
+                const { data: notif, error: errNotif } = await _supabase.from('notificacoes').insert([{
+                    numero_notificacao: numNotificacao,
+                    agravo: 'esporotricose',
+                    vet_nome: vet.nome, vet_crmv: vet.crmv, vet_clinica: vet.clinica,
+                    vet_endereco: vet.endereco, vet_telefone: vet.telefone, vet_email: vet.email,
+                    tutor_nome: document.getElementById('tutor_nome').value,
+                    tutor_cpf: document.getElementById('tutor_cpf').value,
+                    tutor_endereco: document.getElementById('tutor_endereco').value,
+                    tutor_numero: document.getElementById('tutor_numero').value,
+                    tutor_complemento: document.getElementById('tutor_complemento').value,
+                    tutor_bairro: document.getElementById('tutor_bairro').value,
+                    tutor_telefone: document.getElementById('tutor_telefone').value,
+                    animal_nome: document.getElementById('animal_nome').value,
+                    animal_especie: document.getElementById('animal_especie').value,
+                    animal_raca: document.getElementById('animal_raca').value,
+                    animal_idade: document.getElementById('animal_idade').value,
+                    animal_sexo: document.getElementById('animal_sexo').value
+                }]).select().single();
+
+                if (errNotif) throw errNotif;
+
+                // Captura locais selecionados
+                const locais = Array.from(document.querySelectorAll('input[name="locais"]:checked')).map(c => c.value);
+
+                // 3. Insere dados de Esporotricose
+                const { error: errEsporo } = await _supabase.from('notificacao_esporotricose').insert([{
+                    notificacao_id: notif.id,
+                    distribuicao_lesoes: document.getElementById('distribuicao_lesoes').value,
+                    locais_lesoes: locais,
+                    humanos_com_lesoes: document.getElementById('humanos_com_lesoes').value,
+                    outros_animais_com_lesoes: document.getElementById('outros_animais_com_lesoes').value,
+                    coleta_amostra: document.getElementById('coleta_amostra').value,
+                    tratamento_iniciado: document.getElementById('tratamento_iniciado').value,
+                    tratamento_detalhes: document.getElementById('tratamento_detalhes').value,
+                    observacoes: document.getElementById('observacoes').value
+                }]);
+
+                if (errEsporo) throw errEsporo;
+
+                alert(`Notificação número ${numNotificacao} registrada com sucesso!`);
+
+                if (confirm("Deseja fazer uma nova notificação mantendo seus dados pré-preenchidos?")) {
+                    window.location.href = 'index.html';
+                } else {
+                    window.location.reload();
+                }
+
+            } catch (err) {
+                console.error(err);
+                alert("Erro ao enviar notificação. Verifique o console ou a conexão.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Enviar Notificação';
+            }
+        });
+    </script>
+</body>
+</html>
