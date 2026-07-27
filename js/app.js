@@ -1,213 +1,156 @@
 /* ==========================================================================
-   SISTEMA DE INTERAÇÃO (JAVASCRIPT)
+   SISTEMA PRINCIPAL DE COMPORTAMENTO E INTERATIVIDADE (JS)
    NOTIFICAÇÃO DE AGRAVOS EM SAÚDE PÚBLICA (ANIMAIS)
    ========================================================================== */
 
+let urlDestinoAgravo = '';
+
 document.addEventListener('DOMContentLoaded', () => {
-    
-    /* --------------------------------------------------------------------------
-       1. GERENCIAMENTO DE TEMA (CLARO / ESCURO)
-       -------------------------------------------------------------------------- */
-    const themeToggleBtn = document.getElementById('themeToggle');
-    const rootElement = document.documentElement;
-    const themeIcon = themeToggleBtn.querySelector('i') || themeToggleBtn; // Caso use ícone de fonte ou emoji
+    carregarTema();
+    configurarPreenchimentoAutomatico();
+    configurarModalConfirmacao();
+});
 
-    // Verifica a preferência salva no LocalStorage
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        rootElement.setAttribute('data-theme', 'dark');
-        themeIcon.innerHTML = '☀️'; // Ícone para mudar para modo claro
-    } else {
-        themeIcon.innerHTML = '🌙'; // Ícone para mudar para modo escuro
+/* --------------------------------------------------------------------------
+   1. GERENCIAMENTO DE TEMA (MODO CLARO E MODO ESCURO)
+   -------------------------------------------------------------------------- */
+function carregarTema() {
+    // Busca o tema salvo no navegador (ou define 'light' como padrão)
+    const temaSalvo = localStorage.getItem('theme_sorocaba') || 'light';
+    document.documentElement.setAttribute('data-theme', temaSalvo);
+    atualizarIconeTema(temaSalvo);
+
+    // Adiciona o evento de clique ao botão do tema
+    const themeBtn = document.querySelector('.theme-toggle-btn');
+    if (themeBtn) {
+        themeBtn.addEventListener('click', toggleDarkMode);
     }
+}
 
-    // Alterna o tema ao clicar
-    themeToggleBtn.addEventListener('click', () => {
-        const currentTheme = rootElement.getAttribute('data-theme');
-        if (currentTheme === 'dark') {
-            rootElement.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'light');
-            themeIcon.innerHTML = '🌙';
-        } else {
-            rootElement.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-            themeIcon.innerHTML = '☀️';
+function toggleDarkMode() {
+    const temaAtual = document.documentElement.getAttribute('data-theme');
+    const novoTema = temaAtual === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', novoTema);
+    localStorage.setItem('theme_sorocaba', novoTema);
+    atualizarIconeTema(novoTema);
+}
+
+function atualizarIconeTema(tema) {
+    const themeBtn = document.querySelector('.theme-toggle-btn');
+    if (themeBtn) {
+        // Lâmpada acesa no modo escuro, lua no modo claro
+        themeBtn.textContent = tema === 'dark' ? '💡' : '🌙';
+    }
+}
+
+/* --------------------------------------------------------------------------
+   2. AUTO-PREENCHIMENTO E PERSISTÊNCIA DOS DADOS DO VETERINÁRIO
+   -------------------------------------------------------------------------- */
+function configurarPreenchimentoAutomatico() {
+    // IDs exatos dos 6 campos da página inicial
+    const vetFieldsIds = [
+        'vet_nome',
+        'vet_crmv',
+        'vet_clinica',
+        'vet_endereco',
+        'vet_telefone',
+        'vet_email'
+    ];
+
+    vetFieldsIds.forEach(id => {
+        const field = document.getElementById(id);
+        
+        if (field) {
+            // A. Quando a página carrega, preenche com os dados salvos
+            const savedValue = localStorage.getItem(id);
+            if (savedValue) {
+                field.value = savedValue;
+            }
+
+            // B. Salva no navegador em tempo real a cada tecla digitada
+            field.addEventListener('input', (e) => {
+                localStorage.setItem(id, e.target.value);
+            });
         }
     });
+}
 
+/* --------------------------------------------------------------------------
+   3. NAVEGAÇÃO PARA OS AGRAVOS COM VALIDAÇÃO (PÁGINA INICIAL)
+   -------------------------------------------------------------------------- */
+window.irParaAgravo = function(paginaDestino) {
+    // Coleta os valores atuais dos campos obrigatórios
+    const fieldNome = document.getElementById('vet_nome');
+    const fieldCrmv = document.getElementById('vet_crmv');
+    const fieldTelefone = document.getElementById('vet_telefone');
+    const fieldEmail = document.getElementById('vet_email');
+    const fieldClinica = document.getElementById('vet_clinica');
 
-    /* --------------------------------------------------------------------------
-       2. NAVEGAÇÃO ENTRE MENU DE AGRAVOS E FORMULÁRIO
-       -------------------------------------------------------------------------- */
-    const btnAgravos = document.querySelectorAll('.btn-agravo');
-    const menuSection = document.getElementById('menuAgravos');
-    const formSection = document.getElementById('formContainer');
-    const notificacaoForm = document.getElementById('notificacaoForm');
-    const btnVoltar = document.getElementById('btnVoltar');
+    // Validação de segurança para garantir que o médico se identifique
+    if (!fieldNome?.value.trim() || !fieldCrmv?.value.trim() || !fieldTelefone?.value.trim() || !fieldEmail?.value.trim()) {
+        alert("Por favor, preencha todos os campos obrigatórios (*) do Médico Veterinário para prosseguir com a notificação.");
+        return;
+    }
+
+    // Salva a URL para onde vamos redirecionar após a confirmação
+    urlDestinoAgravo = paginaDestino;
     
-    // Elementos visuais dinâmicos
-    const headerAgravoBadge = document.getElementById('headerAgravoBadge');
-    const inputAgravoOculto = document.getElementById('agravoSelecionado'); // Input hidden no form
+    // Injeta os dados no Modal de Confirmação
+    const modalNome = document.getElementById('modal-nome-vet');
+    const modalCrmv = document.getElementById('modal-crmv-vet');
+    const modalClinica = document.getElementById('modal-clinica-vet');
 
-    // Ao clicar em um agravo no menu principal
-    btnAgravos.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            // Pega os dados do botão (requer data-agravo="nome" no HTML)
-            const agravoId = e.currentTarget.getAttribute('data-agravo');
-            const agravoNome = e.currentTarget.querySelector('span').innerText;
+    if (modalNome) modalNome.textContent = fieldNome.value.trim();
+    if (modalCrmv) modalCrmv.textContent = fieldCrmv.value.trim();
+    if (modalClinica) modalClinica.textContent = fieldClinica?.value.trim() || 'Não informada';
+    
+    // Exibe o modal na tela
+    const modal = document.getElementById('modal-confirmacao');
+    if (modal) {
+        modal.style.display = 'flex';
+    } else {
+        // Fallback caso o modal não exista na tela (vai direto)
+        window.location.href = urlDestinoAgravo;
+    }
+};
 
-            // Atualiza o formulário com o agravo selecionado
-            if (inputAgravoOculto) inputAgravoOculto.value = agravoId;
-            
-            // Atualiza o badge no cabeçalho (se existir)
-            if (headerAgravoBadge) {
-                headerAgravoBadge.innerText = agravoNome;
-                headerAgravoBadge.style.display = 'inline-block';
-            }
+/* --------------------------------------------------------------------------
+   4. CONTROLE DO MODAL DE CONFIRMAÇÃO
+   -------------------------------------------------------------------------- */
+function configurarModalConfirmacao() {
+    const btnCancel = document.querySelector('.btn-modal-cancel');
+    const btnConfirm = document.querySelector('.btn-modal-confirm');
+    const modal = document.getElementById('modal-confirmacao');
 
-            // Esconde o menu e mostra o formulário
-            menuSection.style.display = 'none';
-            formSection.style.display = 'block';
-            
-            // Rola a página para o topo suavemente
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // (Opcional) Chamar função para exibir/ocultar campos específicos por agravo
-            configurarCamposPorAgravo(agravoId);
+    // Fechar o modal ao clicar em "Corrigir Dados"
+    if (btnCancel) {
+        btnCancel.addEventListener('click', () => {
+            if (modal) modal.style.display = 'none';
         });
+    }
+
+    // Confirmar e avançar para a página do Agravo
+    if (btnConfirm) {
+        btnConfirm.addEventListener('click', () => {
+            // Um último reforço para garantir que os dados estão no LocalStorage
+            const vetFieldsIds = ['vet_nome', 'vet_crmv', 'vet_clinica', 'vet_endereco', 'vet_telefone', 'vet_email'];
+            vetFieldsIds.forEach(id => {
+                const field = document.getElementById(id);
+                if (field) {
+                    localStorage.setItem(id, field.value);
+                }
+            });
+
+            // Redireciona para o arquivo selecionado (ex: esporotricose.html)
+            window.location.href = urlDestinoAgravo;
+        });
+    }
+
+    // Fechar o modal ao clicar fora da caixa branca (no fundo escuro)
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
     });
-
-    // Botão Voltar (cancela a notificação atual)
-    if (btnVoltar) {
-        btnVoltar.addEventListener('click', (e) => {
-            e.preventDefault();
-            if(confirm('Tem certeza que deseja voltar? Os dados preenchidos serão perdidos.')) {
-                formSection.style.display = 'none';
-                menuSection.style.display = 'block';
-                if (headerAgravoBadge) headerAgravoBadge.style.display = 'none';
-                notificacaoForm.reset();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
-    }
-
-    /* --------------------------------------------------------------------------
-       3. LÓGICA DE CAMPOS DINÂMICOS (EX: MOSTRAR DATA DE ÓBITO)
-       -------------------------------------------------------------------------- */
-    function configurarCamposPorAgravo(agravoId) {
-        // Exemplo: Mostrar campos específicos dependendo da doença
-        // Você pode ocultar/exibir divs do HTML baseadas nessa variável
-        console.log(`Configurando formulário para: ${agravoId}`);
-    }
-
-    // Exemplo genérico: Se marcar "Óbito", exige a "Data do Óbito"
-    const selectObito = document.getElementById('obitoAnimal');
-    const containerDataObito = document.getElementById('containerDataObito');
-    const inputDataObito = document.getElementById('dataObito');
-
-    if (selectObito && containerDataObito) {
-        selectObito.addEventListener('change', (e) => {
-            if (e.target.value === 'sim') {
-                containerDataObito.style.display = 'block';
-                if(inputDataObito) inputDataObito.setAttribute('required', 'required');
-            } else {
-                containerDataObito.style.display = 'none';
-                if(inputDataObito) {
-                    inputDataObito.removeAttribute('required');
-                    inputDataObito.value = ''; // Limpa o campo
-                }
-            }
-        });
-    }
-
-    /* --------------------------------------------------------------------------
-       4. MODAL DE CONFIRMAÇÃO E INTERCEPTAÇÃO DE ENVIO
-       -------------------------------------------------------------------------- */
-    const modalOverlay = document.getElementById('confirmModal');
-    const modalContentData = document.getElementById('modalContentData');
-    const btnModalCancel = document.getElementById('btnCancelar');
-    const btnModalConfirm = document.getElementById('btnConfirmar');
-
-    if (notificacaoForm && modalOverlay) {
-        notificacaoForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Impede o envio padrão
-
-            // Validação nativa do HTML5
-            if (!notificacaoForm.checkValidity()) {
-                notificacaoForm.reportValidity();
-                return;
-            }
-
-            // Coleta os dados do formulário
-            const formData = new FormData(notificacaoForm);
-            modalContentData.innerHTML = ''; // Limpa o modal anterior
-
-            // Constrói o resumo dos dados para o Modal
-            let summaryHTML = '<div class="modal-info-box">';
-            
-            for (let [key, value] of formData.entries()) {
-                // Ignora campos vazios ou de controle interno
-                if (value.trim() !== '' && key !== 'agravoSelecionado') {
-                    // Formata a chave (Ex: nomeTutor -> Nome Tutor)
-                    const formattedKey = key
-                        .replace(/([A-Z])/g, ' $1')
-                        .replace(/^./, str => str.toUpperCase())
-                        .replace(/_/g, ' ');
-
-                    summaryHTML += `
-                        <div class="modal-info-row">
-                            <span class="modal-info-label">${formattedKey}</span>
-                            <span class="modal-info-value">${value}</span>
-                        </div>
-                    `;
-                }
-            }
-            summaryHTML += '</div>';
-            modalContentData.innerHTML = summaryHTML;
-
-            // Exibe o modal
-            modalOverlay.style.display = 'flex';
-        });
-    }
-
-    // Botão Cancelar dentro do Modal
-    if (btnModalCancel) {
-        btnModalCancel.addEventListener('click', () => {
-            modalOverlay.style.display = 'none';
-        });
-    }
-
-    // Botão Confirmar dentro do Modal (Envio Final)
-    if (btnModalConfirm) {
-        btnModalConfirm.addEventListener('click', () => {
-            const originalText = btnModalConfirm.innerText;
-            btnModalConfirm.innerText = 'Enviando...';
-            btnModalConfirm.disabled = true;
-            btnModalCancel.disabled = true;
-
-            // ====================================================================
-            // AQUI ENTRA A INTEGRAÇÃO COM O BACKEND / PLANILHA / GOOGLE FORMS
-            // Como exemplo, estamos usando um timeout para simular o envio.
-            // Para integrar de verdade, você usaria fetch() ou XMLHttpRequest aqui.
-            // ====================================================================
-            
-            setTimeout(() => {
-                alert('Notificação enviada com sucesso à Unidade de Vigilância de Zoonoses!');
-                
-                // Restaura o estado da interface
-                modalOverlay.style.display = 'none';
-                btnModalConfirm.innerText = originalText;
-                btnModalConfirm.disabled = false;
-                btnModalCancel.disabled = false;
-                
-                // Retorna ao menu inicial e limpa o formulário
-                notificacaoForm.reset();
-                formSection.style.display = 'none';
-                menuSection.style.display = 'block';
-                if (headerAgravoBadge) headerAgravoBadge.style.display = 'none';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-            }, 1500); // Simula 1,5s de carregamento
-        });
-    }
-});
+}
