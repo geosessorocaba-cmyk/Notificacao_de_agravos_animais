@@ -8,7 +8,6 @@
    1. VARIÁVEIS DE DESIGN (TEMA CLARO E TEMA ESCURO)
    -------------------------------------------------------------------------- */
 :root {
-    /* Cores do Tema Claro (Padrão) */
     --bg-body: #f4f7f9;
     --bg-card: #ffffff;
     --bg-header: linear-gradient(135deg, #003366 0%, #004b99 50%, #0056b3 100%);
@@ -44,7 +43,6 @@
 }
 
 [data-theme="dark"] {
-    /* Cores do Tema Escuro */
     --bg-body: #0f172a;
     --bg-card: #1e293b;
     --bg-header: linear-gradient(135deg, #090d16 0%, #0f172a 50%, #1e293b 100%);
@@ -98,7 +96,7 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   3. CABEÇALHO SUPERIOR E BARRA DE LOGOS
+   3. CABEÇALHO SUPERIOR E BARRA DE LOGOS (REESTRUTURADO)
    -------------------------------------------------------------------------- */
 header {
     background: var(--bg-header);
@@ -107,9 +105,14 @@ header {
     box-shadow: var(--shadow-md);
     position: relative;
     z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .header-container {
+    width: 100%;
     max-width: 900px;
     margin: 0 auto;
     display: flex;
@@ -119,25 +122,27 @@ header {
     gap: 18px;
 }
 
-/* Barra dos Logos (Prefeitura à esquerda, Lâmpada ao centro, Zoonoses à direita) */
 .logo-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     gap: 15px;
+    margin-bottom: 15px;
 }
 
-/* Estilização dos Logos */
 .logo-bar img {
-    height: 85px;
-    max-width: 260px;
+    height: auto;
+    max-height: 75px;
+    width: auto;
+    max-width: 220px;
     object-fit: contain;
     background-color: #ffffff;
     padding: 8px 14px;
     border-radius: var(--radius-md);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    display: block; 
 }
 
 .logo-bar img:hover {
@@ -145,11 +150,11 @@ header {
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
 }
 
-/* Botão do Modo Claro/Escuro (Lâmpada) Centralizado entre os Logos */
 .theme-toggle-container {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .theme-toggle-btn {
@@ -180,7 +185,6 @@ header {
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
 }
 
-/* Caixa dos Títulos Centralizada Horizontal e Verticalmente */
 .header-title-box {
     text-align: center;
     display: flex;
@@ -207,7 +211,6 @@ header {
     letter-spacing: 0.2px;
 }
 
-/* Subtítulo específico das páginas de Agravos (ex: ESPOROTRICOSE) */
 .header-agravo-badge {
     display: inline-block;
     background-color: rgba(255, 255, 255, 0.2);
@@ -309,7 +312,6 @@ textarea {
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
 
-/* Estado de foco nos campos */
 input:focus,
 select:focus,
 textarea:focus {
@@ -317,7 +319,6 @@ textarea:focus {
     box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.18);
 }
 
-/* Campos somente leitura ou desabilitados */
 input:disabled,
 select:disabled,
 textarea:disabled {
@@ -326,7 +327,6 @@ textarea:disabled {
     opacity: 0.7;
 }
 
-/* Estilização para Selects com opção inicial em branco */
 select option[value=""][disabled] {
     color: var(--text-muted);
 }
@@ -336,7 +336,6 @@ textarea {
     min-height: 90px;
 }
 
-/* Grid de Checkboxes para Sinais/Locais de Lesões */
 .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -372,7 +371,7 @@ textarea {
 }
 
 /* --------------------------------------------------------------------------
-   6. GRID DE BOTÕES DOS AGRAVOS (PÁGINA INICIAL) - FORMATO PROFISSIONAL
+   6. GRID DE BOTÕES DOS AGRAVOS
    -------------------------------------------------------------------------- */
 .agravos-section-title {
     font-size: 1.25rem;
@@ -424,7 +423,6 @@ textarea {
     box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.3);
 }
 
-/* Seta indicativa elegante e profissional (sem emoji) */
 .btn-agravo-arrow {
     display: inline-flex;
     align-items: center;
@@ -628,15 +626,14 @@ textarea {
    9. AJUSTES RESPONSIVOS (DISPOSITIVOS MÓVEIS E TABLETS)
    -------------------------------------------------------------------------- */
 
-/* Tablets e Monitores Pequenos (Até 820px) */
 @media (max-width: 820px) {
     header {
         padding: 20px 15px;
     }
 
     .logo-bar img {
-        height: 70px;
-        max-width: 200px;
+        max-height: 65px;
+        max-width: 180px;
         padding: 6px 10px;
     }
 
@@ -653,7 +650,6 @@ textarea {
     }
 }
 
-/* Celulares e Telas Estreitas (Até 580px) */
 @media (max-width: 580px) {
     header {
         padding: 16px 12px;
@@ -663,19 +659,17 @@ textarea {
         gap: 14px;
     }
 
-    /* Expansão lateral das imagens dos logos mantendo centralidade */
     .logo-bar {
         gap: 8px;
     }
 
     .logo-bar img {
-        height: 58px;
-        max-width: 140px;
+        max-height: 55px;
+        max-width: 130px;
         padding: 5px 8px;
         border-radius: var(--radius-sm);
     }
 
-    /* O botão da lâmpada fica perfeitamente proporcional entre os dois logos */
     .theme-toggle-btn {
         width: 38px;
         height: 38px;
@@ -711,7 +705,6 @@ textarea {
         font-size: 1.15rem;
     }
 
-    /* Botões dos Agravos em Coluna Única no Celular */
     .agravos-grid {
         grid-template-columns: 1fr;
         gap: 12px;
