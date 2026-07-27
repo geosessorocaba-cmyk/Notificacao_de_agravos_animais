@@ -4,10 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Notificação de Esporotricose - Prefeitura Municipal de Sorocaba / UVZ">
-    <title>Notificação de Esporotricose - Sorocaba/SP</title>
+    <title>Notificação de Agravos em Saúde Pública (Animais) - Sorocaba/SP</title>
 
     <link rel="stylesheet" href="css/style.css">
     
+    <style>
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .header-container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .logo-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .header-title-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+        }
+        .header-title-box h1 {
+            font-size: 1.6rem; /* Fonte ligeiramente maior e destacada */
+            font-weight: 700;
+            margin: 5px 0;
+            text-align: center;
+        }
+        .header-title-box p {
+            font-size: 1.1rem; /* Fonte ligeiramente maior */
+            margin: 5px 0 10px 0;
+            text-align: center;
+        }
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -15,17 +59,17 @@
     <header>
         <div class="header-container">
             <div class="logo-bar">
-                <img src="img/logo-prefeitura.png" alt="Prefeitura Municipal de Sorocaba">
+                <img src="img/logo-prefeitura.png" alt="Prefeitura Municipal de Sorocaba" style="max-height: 50px;">
                 <div class="theme-toggle-container">
                     <button type="button" class="theme-toggle-btn" aria-label="Alternar Tema Claro/Escuro" title="Alternar Modo Claro/Escuro">
                         🌙
                     </button>
                 </div>
-                <img src="img/logo-zoonoses.jpg" alt="Unidade de Vigilância de Zoonoses">
+                <img src="img/logo-zoonoses.jpg" alt="Unidade de Vigilância de Zoonoses" style="max-height: 50px;">
             </div>
             <div class="header-title-box">
-                <h1>Notificação de Agravos em Saúde Pública</h1>
-                <p>Prefeitura Municipal de Sorocaba — Seção de Controle de Zoonoses</p>
+                <h1>Notificação de Agravos em Saúde Pública (Animais)</h1>
+                <p>Prefeitura Municipal de Sorocaba - Unidade de Vigilância de Zoonoses</p>
                 <span class="header-agravo-badge">AGRAVO: ESPOROTRICOSE</span>
             </div>
         </div>
@@ -34,11 +78,14 @@
     <main>
         <a href="index.html" class="btn-back">&larr; Voltar para a tela inicial</a>
 
-        <div class="card" style="background-color: var(--primary-light); padding: 15px 20px; border-left: 4px solid var(--primary-color);">
-            <p style="margin: 0; font-size: 0.95rem; color: var(--primary-color);">
-                <strong>Notificante Ativo:</strong> <span id="displayVetNome">Carregando...</span> 
-                (CRMV: <span id="displayVetCrmv"></span>)
+        <div class="card" id="vetNoticeCard" style="background-color: var(--primary-light, #eef6ff); padding: 15px 20px; border-left: 4px solid var(--primary-color, #0066cc);">
+            <p id="vetNoticeText" style="margin: 0; font-size: 0.95rem; color: var(--primary-color, #003366);">
+                <strong>Notificante Ativo:</strong> <span id="displayVetNome">Não identificado</span> 
+                (CRMV: <span id="displayVetCrmv">Não informado</span>)
             </p>
+            <small style="display: block; margin-top: 5px; color: #555; font-style: italic;">
+                Nota: Após a primeira digitação na tela inicial, os dados ficarão salvos para facilitar as próximas digitações.
+            </small>
         </div>
 
         <form id="formAgravoEsporo">
@@ -323,19 +370,18 @@
     <script src="js/app.js"></script>
     
     <script>
-        // Preenche o painel superior com os dados do Veterinário
+        // Carrega dados do Veterinário sem alertas bloqueantes em loop
         document.addEventListener('DOMContentLoaded', () => {
             const vetNome = localStorage.getItem('vet_nome');
             const vetCrmv = localStorage.getItem('vet_crmv');
 
-            if (!vetNome || !vetCrmv) {
-                alert("Identificação do Médico Veterinário não encontrada. Por favor, preencha seus dados na página inicial.");
-                window.location.href = 'index.html';
-                return;
+            if (vetNome && vetCrmv) {
+                document.getElementById('displayVetNome').textContent = vetNome;
+                document.getElementById('displayVetCrmv').textContent = vetCrmv;
+            } else {
+                document.getElementById('displayVetNome').textContent = "Não preenchido na tela inicial";
+                document.getElementById('displayVetCrmv').textContent = "N/A";
             }
-
-            document.getElementById('displayVetNome').textContent = vetNome;
-            document.getElementById('displayVetCrmv').textContent = vetCrmv;
         });
 
         // Configuração do Supabase (Substitua as chaves reais aqui)
@@ -359,12 +405,12 @@
                 const { data: notif, error: errNotif } = await _supabase.from('notificacoes').insert([{
                     numero_notificacao: numNotificacao,
                     agravo: 'esporotricose',
-                    vet_nome: localStorage.getItem('vet_nome'),
-                    vet_crmv: localStorage.getItem('vet_crmv'),
+                    vet_nome: localStorage.getItem('vet_nome') || 'Não informado',
+                    vet_crmv: localStorage.getItem('vet_crmv') || 'Não informado',
                     vet_clinica: localStorage.getItem('vet_clinica') || 'Não informada',
                     vet_endereco: localStorage.getItem('vet_endereco') || 'Não informado',
-                    vet_telefone: localStorage.getItem('vet_telefone'),
-                    vet_email: localStorage.getItem('vet_email'),
+                    vet_telefone: localStorage.getItem('vet_telefone') || 'Não informado',
+                    vet_email: localStorage.getItem('vet_email') || 'Não informado',
                     
                     tutor_nome: document.getElementById('tutor_nome').value,
                     tutor_cpf: document.getElementById('tutor_cpf').value || null,
