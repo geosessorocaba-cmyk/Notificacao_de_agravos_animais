@@ -1,30 +1,17 @@
 /* ==========================================================================
-   SISTEMA PRINCIPAL DE COMPORTAMENTO E INTERATIVIDADE (JS)
-   NOTIFICAÇÃO DE AGRAVOS EM SAÚDE PÚBLICA (ANIMAIS)
+   LÓGICA GLOBAL - MODO ESCURO E LOCALSTORAGE
    ========================================================================== */
-
-let urlDestinoAgravo = '';
 
 document.addEventListener('DOMContentLoaded', () => {
     carregarTema();
-    configurarPreenchimentoAutomatico();
-    configurarModalConfirmacao();
+    carregarDadosVet();
 });
 
-/* --------------------------------------------------------------------------
-   1. GERENCIAMENTO DE TEMA (MODO CLARO E MODO ESCURO)
-   -------------------------------------------------------------------------- */
+// 1. Gerenciamento de Tema (Modo Claro / Modo Escuro)
 function carregarTema() {
-    // Busca o tema salvo no navegador (ou define 'light' como padrão)
     const temaSalvo = localStorage.getItem('theme_sorocaba') || 'light';
     document.documentElement.setAttribute('data-theme', temaSalvo);
     atualizarIconeTema(temaSalvo);
-
-    // Adiciona o evento de clique ao botão do tema
-    const themeBtn = document.querySelector('.theme-toggle-btn');
-    if (themeBtn) {
-        themeBtn.addEventListener('click', toggleDarkMode);
-    }
 }
 
 function toggleDarkMode() {
@@ -37,120 +24,47 @@ function toggleDarkMode() {
 }
 
 function atualizarIconeTema(tema) {
-    const themeBtn = document.querySelector('.theme-toggle-btn');
-    if (themeBtn) {
-        // Lâmpada acesa no modo escuro, lua no modo claro
-        themeBtn.textContent = tema === 'dark' ? '💡' : '🌙';
+    const btnIcon = document.getElementById('theme-icon');
+    if (btnIcon) {
+        // Lâmpada Acesa (💡) no modo claro / Lâmpada Apagada (🔌 ou 🌙) no modo escuro
+        btnIcon.textContent = tema === 'dark' ? '💡' : '🌙';
+        btnIcon.title = tema === 'dark' ? 'Mudar para Modo Claro' : 'Mudar para Modo Escuro';
     }
 }
 
-/* --------------------------------------------------------------------------
-   2. AUTO-PREENCHIMENTO E PERSISTÊNCIA DOS DADOS DO VETERINÁRIO
-   -------------------------------------------------------------------------- */
-function configurarPreenchimentoAutomatico() {
-    // IDs exatos dos 6 campos da página inicial
-    const vetFieldsIds = [
-        'vet_nome',
-        'vet_crmv',
-        'vet_clinica',
-        'vet_endereco',
-        'vet_telefone',
-        'vet_email'
-    ];
-
-    vetFieldsIds.forEach(id => {
-        const field = document.getElementById(id);
-        
-        if (field) {
-            // A. Quando a página carrega, preenche com os dados salvos
-            const savedValue = localStorage.getItem(id);
-            if (savedValue) {
-                field.value = savedValue;
-            }
-
-            // B. Salva no navegador em tempo real a cada tecla digitada
-            field.addEventListener('input', (e) => {
-                localStorage.setItem(id, e.target.value);
-            });
-        }
-    });
+// 2. Gerenciamento de Dados do Veterinário Notificante (localStorage)
+function carregarDadosVet() {
+    const vet = JSON.parse(localStorage.getItem('vetData_sorocaba')) || {};
+    if (document.getElementById('vet_nome')) document.getElementById('vet_nome').value = vet.nome || '';
+    if (document.getElementById('vet_crmv')) document.getElementById('vet_crmv').value = vet.crmv || '';
+    if (document.getElementById('vet_clinica')) document.getElementById('vet_clinica').value = vet.clinica || '';
+    if (document.getElementById('vet_endereco')) document.getElementById('vet_endereco').value = vet.endereco || '';
+    if (document.getElementById('vet_telefone')) document.getElementById('vet_telefone').value = vet.telefone || '';
+    if (document.getElementById('vet_email')) document.getElementById('vet_email').value = vet.email || '';
 }
 
-/* --------------------------------------------------------------------------
-   3. NAVEGAÇÃO PARA OS AGRAVOS COM VALIDAÇÃO (PÁGINA INICIAL)
-   -------------------------------------------------------------------------- */
-window.irParaAgravo = function(paginaDestino) {
-    // Coleta os valores atuais dos campos obrigatórios
-    const fieldNome = document.getElementById('vet_nome');
-    const fieldCrmv = document.getElementById('vet_crmv');
-    const fieldTelefone = document.getElementById('vet_telefone');
-    const fieldEmail = document.getElementById('vet_email');
-    const fieldClinica = document.getElementById('vet_clinica');
+function salvarDadosVet() {
+    const vetData = {
+        nome: document.getElementById('vet_nome').value.trim(),
+        crmv: document.getElementById('vet_crmv').value.trim(),
+        clinica: document.getElementById('vet_clinica').value.trim(),
+        endereco: document.getElementById('vet_endereco').value.trim(),
+        telefone: document.getElementById('vet_telefone').value.trim(),
+        email: document.getElementById('vet_email').value.trim()
+    };
+    localStorage.setItem('vetData_sorocaba', JSON.stringify(vetData));
+}
 
-    // Validação de segurança para garantir que o médico se identifique
-    if (!fieldNome?.value.trim() || !fieldCrmv?.value.trim() || !fieldTelefone?.value.trim() || !fieldEmail?.value.trim()) {
-        alert("Por favor, preencha todos os campos obrigatórios (*) do Médico Veterinário para prosseguir com a notificação.");
+function irParaAgravo(pagina) {
+    const nome = document.getElementById('vet_nome').value.trim();
+    const crmv = document.getElementById('vet_crmv').value.trim();
+    const telefone = document.getElementById('vet_telefone').value.trim();
+    const email = document.getElementById('vet_email').value.trim();
+
+    if (!nome || !crmv || !telefone || !email) {
+        alert("Por favor, preencha todos os campos obrigatórios do Médico Veterinário (Nome, CRMV, Telefone e E-mail) antes de avançar.");
         return;
     }
-
-    // Salva a URL para onde vamos redirecionar após a confirmação
-    urlDestinoAgravo = paginaDestino;
-    
-    // Injeta os dados no Modal de Confirmação
-    const modalNome = document.getElementById('modal-nome-vet');
-    const modalCrmv = document.getElementById('modal-crmv-vet');
-    const modalClinica = document.getElementById('modal-clinica-vet');
-
-    if (modalNome) modalNome.textContent = fieldNome.value.trim();
-    if (modalCrmv) modalCrmv.textContent = fieldCrmv.value.trim();
-    if (modalClinica) modalClinica.textContent = fieldClinica?.value.trim() || 'Não informada';
-    
-    // Exibe o modal na tela
-    const modal = document.getElementById('modal-confirmacao');
-    if (modal) {
-        modal.style.display = 'flex';
-    } else {
-        // Fallback caso o modal não exista na tela (vai direto)
-        window.location.href = urlDestinoAgravo;
-    }
-};
-
-/* --------------------------------------------------------------------------
-   4. CONTROLE DO MODAL DE CONFIRMAÇÃO
-   -------------------------------------------------------------------------- */
-function configurarModalConfirmacao() {
-    const btnCancel = document.querySelector('.btn-modal-cancel');
-    const btnConfirm = document.querySelector('.btn-modal-confirm');
-    const modal = document.getElementById('modal-confirmacao');
-
-    // Fechar o modal ao clicar em "Corrigir Dados"
-    if (btnCancel) {
-        btnCancel.addEventListener('click', () => {
-            if (modal) modal.style.display = 'none';
-        });
-    }
-
-    // Confirmar e avançar para a página do Agravo
-    if (btnConfirm) {
-        btnConfirm.addEventListener('click', () => {
-            // Um último reforço para garantir que os dados estão no LocalStorage
-            const vetFieldsIds = ['vet_nome', 'vet_crmv', 'vet_clinica', 'vet_endereco', 'vet_telefone', 'vet_email'];
-            vetFieldsIds.forEach(id => {
-                const field = document.getElementById(id);
-                if (field) {
-                    localStorage.setItem(id, field.value);
-                }
-            });
-
-            // Redireciona para o arquivo selecionado (ex: esporotricose.html)
-            window.location.href = urlDestinoAgravo;
-        });
-    }
-
-    // Fechar o modal ao clicar fora da caixa branca (no fundo escuro)
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-        }
-    });
+    salvarDadosVet();
+    window.location.href = pagina;
 }
