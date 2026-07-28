@@ -190,7 +190,7 @@
             }
         });
 
-        // ENVIO DO FORMULÁRIO
+// ENVIO DO FORMULÁRIO
         document.getElementById('esporo-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -199,28 +199,18 @@
             btnSubmit.innerText = 'Enviando Notificação... Aguarde';
 
             try {
-                // 1. Número da Notificação e Ano Atual
-                const anoAtual = new Date().getFullYear();
-                let numNotificacao = 'ESP-' + Date.now();
-                
-                try {
-                    const { data: rpcNum, error: rpcErr } = await supabaseClient.rpc('gerar_numero_notificacao', { p_agravo: 'esporotricose' });
-                    if (!rpcErr && rpcNum) numNotificacao = rpcNum;
-                } catch (e) {
-                    console.warn("RPC não encontrada ou falhou, usando número local:", numNotificacao);
-                }
+                // Monta o array de locais
+                const locaisArray = Array.from(document.querySelectorAll('input[name="locais"]:checked'))
+                    .map(checkbox => checkbox.value);
 
-                // 2. Tabela Principal 'notificacoes'
-                const dadosNotificacaoGeral = {
-                    numero_notificacao: numNotificacao,
-                    agravo: 'esporotricose',
-                    ano: anoAtual, // Adicionado pois é NOT NULL no banco
-                    vet_nome: vetData?.nome || 'Não informado',
-                    vet_crmv: vetData?.crmv || 'Não informado',
-                    vet_clinica: vetData?.clinica || 'Não informada',
-                    vet_endereco: vetData?.endereco || 'Não informado',
-                    vet_telefone: vetData?.telefone || 'Não informado',
-                    vet_email: vetData?.email || 'Não informado',
+                // Reúne TODOS os dados em um único pacote (payload)
+                const payload = {
+                    vet_nome: vetData?.nome || '',
+                    vet_crmv: vetData?.crmv || '',
+                    vet_clinica: vetData?.clinica || '',
+                    vet_endereco: vetData?.endereco || '',
+                    vet_telefone: vetData?.telefone || '',
+                    vet_email: vetData?.email || '',
                     tutor_nome: document.getElementById('tutor_nome').value || '',
                     tutor_cpf: document.getElementById('tutor_cpf').value || '',
                     tutor_endereco: document.getElementById('tutor_endereco').value || '',
@@ -232,30 +222,9 @@
                     animal_especie: document.getElementById('animal_especie').value || '',
                     animal_raca: document.getElementById('animal_raca').value || '',
                     animal_idade: document.getElementById('animal_idade').value || '',
-                    animal_sexo: document.getElementById('animal_sexo').value || ''
-                };
-
-                const { data: notifSalva, error: errNotif } = await supabaseClient
-                    .from('notificacoes')
-                    .insert([dadosNotificacaoGeral])
-                    .select()
-                    .single();
-
-                if (errNotif) throw new Error("Falha ao salvar Notificação Geral: " + errNotif.message);
-
-                if (!notifSalva || !notifSalva.id) {
-                    throw new Error("A notificação foi inserida, mas o banco de dados não retornou o ID gerado.");
-                }
-
-                // 3. Captura dos Checkboxes (Mantido como Array nativo)
-                const locaisArray = Array.from(document.querySelectorAll('input[name="locais"]:checked'))
-                    .map(checkbox => checkbox.value);
-
-                // 4. Tabela específica 'notificacao_esporotricose'
-                const dadosEspecificosEsporo = {
-                    notificacao_id: notifSalva.id,
+                    animal_sexo: document.getElementById('animal_sexo').value || '',
                     distribuicao_lesoes: document.getElementById('distribuicao_lesoes').value || '',
-                    locais_lesoes: locaisArray, // Enviado como array para a coluna _text
+                    locais_lesoes: locaisArray, 
                     humanos_com_lesoes: document.getElementById('humanos_com_lesoes').value || '',
                     outros_animais_com_lesoes: document.getElementById('outros_animais_com_lesoes').value || '',
                     coleta_amostra: document.getElementById('coleta_amostra').value || '',
@@ -264,16 +233,12 @@
                     observacoes: document.getElementById('observacoes').value || ''
                 };
 
-                // Inserção direta sem bloco de fallback para garantir transparência de erros
-                const { error: errEsporo } = await supabaseClient
-                    .from('notificacao_esporotricose')
-                    .insert([dadosEspecificosEsporo]);
-                
-                if (errEsporo) {
-                    throw new Error("Falha ao salvar dados Clínicos: " + errEsporo.message);
-                }
+                // Faz uma ÚNICA chamada para o banco de dados
+                const { data, error } = await supabaseClient.rpc('salvar_notificacao_esporotricose', { payload });
 
-                alert(`✅ Notificação registrada com sucesso!\nNúmero do Registro: ${numNotificacao}`);
+                if (error) throw new Error(error.message);
+
+                alert(`✅ Notificação registrada com sucesso!\nNúmero do Registro: ${data.numero_notificacao}`);
 
                 if (confirm("Deseja realizar uma nova notificação?")) {
                     window.location.href = 'index.html';
@@ -283,8 +248,8 @@
                 }
 
             } catch (error) {
-                console.error("Erro completo no processo:", error);
-                alert("❌ Ocorreu um problema ao enviar:\n" + error.message + "\n\n(Verifique o Console (F12) para mais detalhes)");
+                console.error("Erro no envio:", error);
+                alert("❌ Ocorreu um problema ao enviar:\n" + error.message);
             } finally {
                 btnSubmit.disabled = false;
                 btnSubmit.innerText = 'Enviar Notificação';
