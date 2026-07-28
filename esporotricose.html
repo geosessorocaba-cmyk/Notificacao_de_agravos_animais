@@ -29,30 +29,60 @@
         <form id="esporo-form">
             <div class="card">
                 <h2>👤 Dados do Tutor / Proprietário</h2>
-                <div class="form-group"><label>Nome do Tutor *</label><input type="text" id="tutor_nome" required placeholder="Nome completo do responsável"></div>
-                <div class="form-group"><label>CPF do Tutor</label><input type="text" id="tutor_cpf" placeholder="000.000.000-00"></div>
-                <div class="form-group"><label>Endereço Completo (Rua/Avenida) *</label><input type="text" id="tutor_endereco" required></div>
-                <div class="form-group"><label>Número</label><input type="text" id="tutor_numero"></div>
-                <div class="form-group"><label>Complemento</label><input type="text" id="tutor_complemento"></div>
-                <div class="form-group"><label>Bairro *</label><input type="text" id="tutor_bairro" required></div>
-                <div class="form-group"><label>Telefone de Contato</label><input type="tel" id="tutor_telefone"></div>
+                <div class="form-group">
+                    <label for="tutor_nome">Nome do Tutor *</label>
+                    <input type="text" id="tutor_nome" required placeholder="Nome completo do responsável">
+                </div>
+                <div class="form-group">
+                    <label for="tutor_cpf">CPF do Tutor</label>
+                    <input type="text" id="tutor_cpf" placeholder="000.000.000-00">
+                </div>
+                <div class="form-group">
+                    <label for="tutor_endereco">Endereço Completo (Rua/Avenida) *</label>
+                    <input type="text" id="tutor_endereco" required>
+                </div>
+                <div class="form-group">
+                    <label for="tutor_numero">Número</label>
+                    <input type="text" id="tutor_numero">
+                </div>
+                <div class="form-group">
+                    <label for="tutor_complemento">Complemento</label>
+                    <input type="text" id="tutor_complemento">
+                </div>
+                <div class="form-group">
+                    <label for="tutor_bairro">Bairro *</label>
+                    <input type="text" id="tutor_bairro" required>
+                </div>
+                <div class="form-group">
+                    <label for="tutor_telefone">Telefone de Contato</label>
+                    <input type="tel" id="tutor_telefone">
+                </div>
             </div>
 
             <div class="card">
                 <h2>🐾 Dados do Animal</h2>
-                <div class="form-group"><label>Nome do Animal *</label><input type="text" id="animal_nome" required></div>
                 <div class="form-group">
-                    <label>Espécie *</label>
+                    <label for="animal_nome">Nome do Animal *</label>
+                    <input type="text" id="animal_nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="animal_especie">Espécie *</label>
                     <select id="animal_especie" required>
                         <option value="FELINA">Felina</option>
                         <option value="CANINA">Canina</option>
                         <option value="OUTRO">Outro</option>
                     </select>
                 </div>
-                <div class="form-group"><label>Raça</label><input type="text" id="animal_raca" placeholder="Ex: SRD, Siamês..."></div>
-                <div class="form-group"><label>Idade</label><input type="text" id="animal_idade" placeholder="Ex: 2 anos"></div>
                 <div class="form-group">
-                    <label>Sexo</label>
+                    <label for="animal_raca">Raça</label>
+                    <input type="text" id="animal_raca" placeholder="Ex: SRD, Siamês...">
+                </div>
+                <div class="form-group">
+                    <label for="animal_idade">Idade</label>
+                    <input type="text" id="animal_idade" placeholder="Ex: 2 anos">
+                </div>
+                <div class="form-group">
+                    <label for="animal_sexo">Sexo</label>
                     <select id="animal_sexo">
                         <option value="MACHO">Macho</option>
                         <option value="FÊMEA">Fêmea</option>
@@ -63,7 +93,7 @@
             <div class="card">
                 <h2>🩺 Dados Clínicos e Epidemiológicos</h2>
                 <div class="form-group">
-                    <label>Distribuição das Lesões *</label>
+                    <label for="distribuicao_lesoes">Distribuição das Lesões *</label>
                     <select id="distribuicao_lesoes" required>
                         <option value="Única">Única</option>
                         <option value="Múltipla (até 5)">Múltipla (até 5)</option>
@@ -84,7 +114,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Há pessoas na residência com lesões de pele?</label>
+                    <label for="humanos_com_lesoes">Há pessoas na residência com lesões de pele?</label>
                     <select id="humanos_com_lesoes">
                         <option value="Não">Não</option>
                         <option value="Sim">Sim</option>
@@ -93,7 +123,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Outros animais na residência com lesões?</label>
+                    <label for="outros_animais_com_lesoes">Outros animais na residência com lesões?</label>
                     <select id="outros_animais_com_lesoes">
                         <option value="Não">Não</option>
                         <option value="Sim">Sim</option>
@@ -101,7 +131,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Coleta de amostra para exame diagnóstico</label>
+                    <label for="coleta_amostra">Coleta de amostra para exame diagnóstico</label>
                     <select id="coleta_amostra">
                         <option value="Não, solicito coleta pela Zoonoses">Não, solicito coleta pela Zoonoses</option>
                         <option value="Sim, por laboratório particular">Sim, por laboratório particular</option>
@@ -109,7 +139,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Tratamento específico já foi iniciado?</label>
+                    <label for="tratamento_iniciado">Tratamento específico já foi iniciado?</label>
                     <select id="tratamento_iniciado">
                         <option value="Sim">Sim</option>
                         <option value="Não">Não</option>
@@ -117,12 +147,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Se iniciado, qual medicamento e data?</label>
+                    <label for="tratamento_detalhes">Se iniciado, qual medicamento e data?</label>
                     <textarea id="tratamento_detalhes" rows="2" placeholder="Ex: Itraconazol 100mg iniciado em 10/07/2026"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Observações Adicionais</label>
+                    <label for="observacoes">Observações Adicionais</label>
                     <textarea id="observacoes" rows="3"></textarea>
                 </div>
 
@@ -133,33 +163,62 @@
 
     <script src="js/app.js"></script>
     <script>
+        // CONFIGURAÇÃO DO SUPABASE (Variável do cliente com nome único)
         const SUPABASE_URL = 'https://iwohicnazfxtysetelpz.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3b2hpY25hemZ4dHlzZXRlbHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MDgyNzYsImV4cCI6MjEwMDQ4NDI3Nn0.x8QrBDzCV-qqhkv7zLZYB7FH04NT6CKOcjQOio9TglI';
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        document.getElementById('esporo-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const vet = JSON.parse(localStorage.getItem('vetData_sorocaba')) || {};
+        // VARIÁVEL PARA GUARDAR OS DADOS DO VETERINÁRIO
+        let vetData = null;
 
-            if (!vet.nome || !vet.crmv || !vet.telefone || !vet.email) {
-                alert("Identificamos que os dados do Médico Veterinário estão incompletos. Você será redirecionado para a página inicial.");
-                window.location.href = 'index.html';
-                return;
+        document.addEventListener('DOMContentLoaded', () => {
+            const vetSalvo = localStorage.getItem('vetNotificante');
+            if (vetSalvo) {
+                try {
+                    vetData = JSON.parse(vetSalvo);
+                } catch (err) {
+                    console.error("Erro ao ler dados do veterinário", err);
+                }
             }
 
-            const btn = document.getElementById('btn-submit');
-            btn.disabled = true;
-            btn.innerText = 'Enviando...';
+            if (!vetData || !vetData.nome || !vetData.crmv) {
+                alert("Identificamos que os dados do Médico Veterinário não foram preenchidos. Você será redirecionado para a página inicial.");
+                window.location.href = 'index.html';
+            }
+        });
+
+        // ENVIO DO FORMULÁRIO DE ESPOROTRICOSE
+        document.getElementById('esporo-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = 'Enviando Notificação... Aguarde';
 
             try {
-                const { data: numNotificacao, error: errNum } = await _supabase.rpc('gerar_numero_notificacao', { p_agravo: 'esporotricose' });
-                if (errNum) throw new Error("Erro ao gerar número: " + errNum.message);
+                // 1. Tenta gerar número via RPC ou cria código automático baseado em data
+                let numNotificacao = '';
+                try {
+                    const { data: rpcNum, error: rpcErr } = await supabaseClient.rpc('gerar_numero_notificacao', { p_agravo: 'esporotricose' });
+                    if (!rpcErr && rpcNum) {
+                        numNotificacao = rpcNum;
+                    } else {
+                        numNotificacao = 'ESP-' + Date.now();
+                    }
+                } catch (e) {
+                    numNotificacao = 'ESP-' + Date.now();
+                }
 
-                const { data: notif, error: errNotif } = await _supabase.from('notificacoes').insert([{
+                // 2. Monta objeto de dados para a tabela principal 'notificacoes'
+                const dadosNotificacaoGeral = {
                     numero_notificacao: numNotificacao,
                     agravo: 'esporotricose',
-                    vet_nome: vet.nome, vet_crmv: vet.crmv, vet_clinica: vet.clinica || 'Não informada',
-                    vet_endereco: vet.endereco || 'Não informado', vet_telefone: vet.telefone, vet_email: vet.email,
+                    vet_nome: vetData.nome,
+                    vet_crmv: vetData.crmv,
+                    vet_clinica: vetData.clinica || 'Não informada',
+                    vet_endereco: vetData.endereco || 'Não informado',
+                    vet_telefone: vetData.telefone,
+                    vet_email: vetData.email,
                     tutor_nome: document.getElementById('tutor_nome').value,
                     tutor_cpf: document.getElementById('tutor_cpf').value || null,
                     tutor_endereco: document.getElementById('tutor_endereco').value,
@@ -172,40 +231,58 @@
                     animal_raca: document.getElementById('animal_raca').value || null,
                     animal_idade: document.getElementById('animal_idade').value || null,
                     animal_sexo: document.getElementById('animal_sexo').value
-                }]).select().single();
+                };
 
-                if (errNotif) throw new Error("Erro na tabela principal: " + errNotif.message);
+                // Inserção na tabela principal 'notificacoes'
+                const { data: notifSalva, error: errNotif } = await supabaseClient
+                    .from('notificacoes')
+                    .insert([dadosNotificacaoGeral])
+                    .select()
+                    .single();
 
-                const locais = Array.from(document.querySelectorAll('input[name="locais"]:checked')).map(c => c.value);
+                if (errNotif) throw new Error("Erro na tabela principal (notificacoes): " + errNotif.message);
 
-                const { error: errEsporo } = await _supabase.from('notificacao_esporotricose').insert([{
-                    notificacao_id: notif.id,
+                // 3. Captura dos marcadores de checkboxes (locais das lesões)
+                const locaisSelecionados = Array.from(document.querySelectorAll('input[name="locais"]:checked'))
+                    .map(checkbox => checkbox.value);
+
+                // 4. Monta objeto para a tabela de esporotricose
+                const dadosEspecificosEsporo = {
+                    notificacao_id: notifSalva.id,
                     distribuicao_lesoes: document.getElementById('distribuicao_lesoes').value,
-                    locais_lesoes: locais,
+                    locais_lesoes: locaisSelecionados,
                     humanos_com_lesoes: document.getElementById('humanos_com_lesoes').value,
                     outros_animais_com_lesoes: document.getElementById('outros_animais_com_lesoes').value,
                     coleta_amostra: document.getElementById('coleta_amostra').value,
                     tratamento_iniciado: document.getElementById('tratamento_iniciado').value,
                     tratamento_detalhes: document.getElementById('tratamento_detalhes').value || null,
                     observacoes: document.getElementById('observacoes').value || null
-                }]);
+                };
 
-                if (errEsporo) throw new Error("Erro nos dados de esporotricose: " + errEsporo.message);
+                // Tenta inserir na tabela de esporotricose (suporta 'notificacao_esporotricose' ou 'esporotricose')
+                let errEsporo = null;
+                const res1 = await supabaseClient.from('notificacao_esporotricose').insert([dadosEspecificosEsporo]);
+                if (res1.error) {
+                    const res2 = await supabaseClient.from('esporotricose').insert([dadosEspecificosEsporo]);
+                    errEsporo = res2.error;
+                }
 
-                alert(`Notificação número ${numNotificacao} registrada com sucesso!`);
+                if (errEsporo) throw new Error("Erro na tabela de Esporotricose: " + errEsporo.message);
+
+                alert(`✅ Notificação registrada com sucesso!\nNúmero do Registro: ${numNotificacao}`);
 
                 if (confirm("Deseja realizar uma nova notificação?")) {
                     window.location.href = 'index.html';
                 } else {
-                    window.location.reload();
+                    document.getElementById('esporo-form').reset();
                 }
 
-            } catch (err) {
-                console.error(err);
-                alert("Falha no envio:\n" + err.message);
+            } catch (error) {
+                console.error("Erro no processo de notificação:", error);
+                alert("❌ Ocorreu uma falha no envio:\n" + error.message);
             } finally {
-                btn.disabled = false;
-                btn.innerText = 'Enviar Notificação';
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = 'Enviar Notificação';
             }
         });
     </script>
