@@ -184,7 +184,6 @@
                 }
             }
 
-            // Validação rigorosa dos dados do veterinário para evitar erro de restrição NOT NULL no banco
             if (!vetData || !vetData.nome || !vetData.crmv || !vetData.telefone || !vetData.email) {
                 alert("Aviso: Os dados completos do Médico Veterinário não foram encontrados.\nPor favor, preencha-os novamente na tela inicial.");
                 window.location.href = 'index.html';
@@ -200,8 +199,10 @@
             btnSubmit.innerText = 'Enviando Notificação... Aguarde';
 
             try {
-                // 1. Número da Notificação
+                // 1. Número da Notificação e Ano Atual
+                const anoAtual = new Date().getFullYear();
                 let numNotificacao = 'ESP-' + Date.now();
+                
                 try {
                     const { data: rpcNum, error: rpcErr } = await supabaseClient.rpc('gerar_numero_notificacao', { p_agravo: 'esporotricose' });
                     if (!rpcErr && rpcNum) numNotificacao = rpcNum;
@@ -209,10 +210,11 @@
                     console.warn("RPC não encontrada ou falhou, usando número local:", numNotificacao);
                 }
 
-                // 2. Tabela Principal 'notificacoes' (com fallbacks vazios "" para evitar NULL constraints)
+                // 2. Tabela Principal 'notificacoes'
                 const dadosNotificacaoGeral = {
                     numero_notificacao: numNotificacao,
                     agravo: 'esporotricose',
+                    ano: anoAtual, // Adicionado pois é NOT NULL no banco
                     vet_nome: vetData?.nome || 'Não informado',
                     vet_crmv: vetData?.crmv || 'Não informado',
                     vet_clinica: vetData?.clinica || 'Não informada',
@@ -239,23 +241,21 @@
                     .select()
                     .single();
 
-                if (errNotif) throw new Error("Falha ao salvar Notificação Geral (Tabela 'notificacoes'): " + errNotif.message);
+                if (errNotif) throw new Error("Falha ao salvar Notificação Geral: " + errNotif.message);
 
-                // O Supabase retorna os dados salvos quando usamos `.select().single()`
                 if (!notifSalva || !notifSalva.id) {
-                    throw new Error("A notificação foi inserida, mas o banco de dados não retornou o ID gerado devido a permissões (RLS). A segunda etapa pode falhar.");
+                    throw new Error("A notificação foi inserida, mas o banco de dados não retornou o ID gerado.");
                 }
 
-                // 3. Captura dos Checkboxes (junta todos em uma String separada por vírgula para não quebrar o Postgres)
+                // 3. Captura dos Checkboxes (Mantido como Array nativo)
                 const locaisArray = Array.from(document.querySelectorAll('input[name="locais"]:checked'))
                     .map(checkbox => checkbox.value);
-                const locaisSelecionadosStr = locaisArray.length > 0 ? locaisArray.join(', ') : 'Nenhum selecionado';
 
-                // 4. Tabela específica 'esporotricose'
+                // 4. Tabela específica 'notificacao_esporotricose'
                 const dadosEspecificosEsporo = {
-                    notificacao_id: notifSalva.id, // Chave estrangeira
+                    notificacao_id: notifSalva.id,
                     distribuicao_lesoes: document.getElementById('distribuicao_lesoes').value || '',
-                    locais_lesoes: locaisSelecionadosStr,
+                    locais_lesoes: locaisArray, // Enviado como array para a coluna _text
                     humanos_com_lesoes: document.getElementById('humanos_com_lesoes').value || '',
                     outros_animais_com_lesoes: document.getElementById('outros_animais_com_lesoes').value || '',
                     coleta_amostra: document.getElementById('coleta_amostra').value || '',
@@ -264,15 +264,13 @@
                     observacoes: document.getElementById('observacoes').value || ''
                 };
 
-                // Tenta inserir na tabela de esporotricose. Tenta dois nomes comuns em projetos assim:
-                let resEsporo = await supabaseClient.from('notificacao_esporotricose').insert([dadosEspecificosEsporo]);
+                // Inserção direta sem bloco de fallback para garantir transparência de erros
+                const { error: errEsporo } = await supabaseClient
+                    .from('notificacao_esporotricose')
+                    .insert([dadosEspecificosEsporo]);
                 
-                if (resEsporo.error) {
-                    console.warn("Tabela 'notificacao_esporotricose' falhou. Tentando 'esporotricose'...");
-                    resEsporo = await supabaseClient.from('esporotricose').insert([dadosEspecificosEsporo]);
-                    if (resEsporo.error) {
-                        throw new Error("Falha ao salvar dados Clínicos (Tabela Específica): " + resEsporo.error.message);
-                    }
+                if (errEsporo) {
+                    throw new Error("Falha ao salvar dados Clínicos: " + errEsporo.message);
                 }
 
                 alert(`✅ Notificação registrada com sucesso!\nNúmero do Registro: ${numNotificacao}`);
