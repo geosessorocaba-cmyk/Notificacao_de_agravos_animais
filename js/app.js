@@ -124,3 +124,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+/* ==========================================================================
+   FUNÇÃO GLOBAL DE NAVEGAÇÃO (Adicionar no final do app.js)
+   ========================================================================== */
+
+window.irParaAgravo = function(urlDestino) {
+    // 1. Capturar os campos da tela inicial (verifique se os IDs batem com seu HTML)
+    const vetNome = document.getElementById('vet_nome')?.value.trim() || '';
+    const vetCrmv = document.getElementById('vet_crmv')?.value.trim() || '';
+    const vetTelefone = document.getElementById('vet_telefone')?.value.trim() || '';
+    const vetEmail = document.getElementById('vet_email')?.value.trim() || '';
+
+    // 2. Validação simples: exigir Nome e CRMV antes de avançar
+    if (!vetNome || !vetCrmv) {
+        alert('Por favor, preencha os dados do Médico Veterinário (Nome e CRMV) antes de selecionar o agravo.');
+        return;
+    }
+
+    // 3. Salvar os dados no LocalStorage do navegador
+    const dadosVeterinario = {
+        nome: vetNome,
+        crmv: vetCrmv,
+        telefone: vetTelefone,
+        email: vetEmail
+    };
+    localStorage.setItem('vetNotificante', JSON.stringify(dadosVeterinario));
+
+    // 4. Redirecionar para a página do agravo escolhido (ex: esporotricose.html)
+    window.location.href = urlDestino;
+};
