@@ -14,20 +14,22 @@
         </button>
 
         <div class="header-container">
-            <div class="logo-bar">
+            <div class="logo-left">
                 <img src="images/logo_prefeitura.png" alt="Prefeitura Municipal de Sorocaba">
-                <img src="images/logo_zoonoses.jpg" alt="Seção de Controle de Zoonoses">
             </div>
             <div class="header-title-box">
                 <h1>Notificação de Esporotricose (Canina / Felina)</h1>
                 <p>Prefeitura Municipal de Sorocaba — Seção de Controle de Zoonoses</p>
             </div>
+            <div class="logo-right">
+                <img src="images/logo_zoonoses.jpg" alt="Seção de Controle de Zoonoses">
+            </div>
         </div>
     </header>
 
     <main>
-        <div class="nav-back-container" style="margin-bottom: 20px;">
-            <button onclick="window.location.href='index.html'" class="btn-back" style="background: none; border: 1px solid var(--border-color); padding: 8px 12px; border-radius: 6px; cursor: pointer; color: var(--text-primary); font-weight: 600;">← Voltar para a tela inicial</button>
+        <div style="margin-bottom: 20px;">
+            <button onclick="window.location.href='index.html'" class="btn-back">← Voltar para a tela inicial</button>
         </div>
 
         <form id="esporo-form">
@@ -163,6 +165,33 @@
                 <button type="submit" class="btn-submit" id="btn-submit">Enviar Notificação</button>
             </div>
         </form>
+
+        <!-- MODAL CUSTOMIZADO DE SUCESSO -->
+        <div id="modal-sucesso" class="modal-overlay">
+            <div class="modal-content">
+                <h3 style="color: var(--accent-success); font-size: 1.5rem; margin-bottom: 15px;">✅ Sucesso!</h3>
+                <p id="modal-msg-sucesso" style="font-size: 1.05rem; margin-bottom: 25px; color: var(--text-primary);"></p>
+                
+                <!-- Etapa 1: Pergunta Sim/Não -->
+                <div id="modal-step-1">
+                    <p style="font-weight: 600; margin-bottom: 15px; color: var(--text-secondary);">Deseja realizar uma nova notificação?</p>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-modal-cancel" onclick="escolhaNovaNotificacao('nao')">Não</button>
+                        <button type="button" class="btn-modal-confirm" onclick="escolhaNovaNotificacao('sim')">Sim</button>
+                    </div>
+                </div>
+
+                <!-- Etapa 2: Qual agravo? -->
+                <div id="modal-step-2" style="display: none;">
+                    <p style="font-weight: 600; margin-bottom: 15px; color: var(--text-secondary);">Qual agravo deseja notificar agora?</p>
+                    <div class="modal-buttons" style="flex-direction: column; gap: 12px;">
+                        <button type="button" class="btn-modal-confirm" onclick="escolhaNovaNotificacao('mesmo')">Mesmo Agravo (Esporotricose)</button>
+                        <button type="button" class="btn-modal-cancel" onclick="escolhaNovaNotificacao('outro')">Outro Agravo (Voltar ao Início)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <script src="js/app.js"></script>
@@ -190,7 +219,25 @@
             }
         });
 
-// ENVIO DO FORMULÁRIO
+        // LÓGICA DE NAVEGAÇÃO DO MODAL
+        window.escolhaNovaNotificacao = function(escolha) {
+            if (escolha === 'nao') {
+                // Redireciona para o index. Como tiramos o autocompletar no carregamento, a tela virá zerada.
+                window.location.href = 'index.html'; 
+            } else if (escolha === 'sim') {
+                document.getElementById('modal-step-1').style.display = 'none';
+                document.getElementById('modal-step-2').style.display = 'block';
+            } else if (escolha === 'mesmo') {
+                document.getElementById('esporo-form').reset();
+                document.getElementById('modal-sucesso').style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (escolha === 'outro') {
+                // Retorna ao index avisando para Autocompletar o veterinário para agilizar
+                window.location.href = 'index.html?autofill=true';
+            }
+        };
+
+        // ENVIO DO FORMULÁRIO
         document.getElementById('esporo-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -199,18 +246,25 @@
             btnSubmit.innerText = 'Enviando Notificação... Aguarde';
 
             try {
-                // Monta o array de locais
-                const locaisArray = Array.from(document.querySelectorAll('input[name="locais"]:checked'))
-                    .map(checkbox => checkbox.value);
+                // 1. Número da Notificação
+                let numNotificacao = 'ESP-' + Date.now();
+                try {
+                    const { data: rpcNum, error: rpcErr } = await supabaseClient.rpc('gerar_numero_notificacao', { p_agravo: 'esporotricose' });
+                    if (!rpcErr && rpcNum) numNotificacao = rpcNum;
+                } catch (e) {
+                    console.warn("RPC não encontrada ou falhou, usando número local:", numNotificacao);
+                }
 
-                // Reúne TODOS os dados em um único pacote (payload)
-                const payload = {
-                    vet_nome: vetData?.nome || '',
-                    vet_crmv: vetData?.crmv || '',
-                    vet_clinica: vetData?.clinica || '',
-                    vet_endereco: vetData?.endereco || '',
-                    vet_telefone: vetData?.telefone || '',
-                    vet_email: vetData?.email || '',
+                // 2. Tabela Principal
+                const dadosNotificacaoGeral = {
+                    numero_notificacao: numNotificacao,
+                    agravo: 'esporotricose',
+                    vet_nome: vetData?.nome || 'Não informado',
+                    vet_crmv: vetData?.crmv || 'Não informado',
+                    vet_clinica: vetData?.clinica || 'Não informada',
+                    vet_endereco: vetData?.endereco || 'Não informado',
+                    vet_telefone: vetData?.telefone || 'Não informado',
+                    vet_email: vetData?.email || 'Não informado',
                     tutor_nome: document.getElementById('tutor_nome').value || '',
                     tutor_cpf: document.getElementById('tutor_cpf').value || '',
                     tutor_endereco: document.getElementById('tutor_endereco').value || '',
@@ -222,9 +276,28 @@
                     animal_especie: document.getElementById('animal_especie').value || '',
                     animal_raca: document.getElementById('animal_raca').value || '',
                     animal_idade: document.getElementById('animal_idade').value || '',
-                    animal_sexo: document.getElementById('animal_sexo').value || '',
+                    animal_sexo: document.getElementById('animal_sexo').value || ''
+                };
+
+                const { data: notifSalva, error: errNotif } = await supabaseClient
+                    .from('notificacoes')
+                    .insert([dadosNotificacaoGeral])
+                    .select()
+                    .single();
+
+                if (errNotif) throw new Error("Falha ao salvar Notificação Geral (Tabela 'notificacoes'): " + errNotif.message);
+                if (!notifSalva || !notifSalva.id) throw new Error("A notificação foi inserida, mas o ID gerado não foi retornado (RLS).");
+
+                // 3. Captura dos Checkboxes
+                const locaisArray = Array.from(document.querySelectorAll('input[name="locais"]:checked'))
+                    .map(checkbox => checkbox.value);
+                const locaisSelecionadosStr = locaisArray.length > 0 ? locaisArray.join(', ') : 'Nenhum selecionado';
+
+                // 4. Tabela específica 'esporotricose'
+                const dadosEspecificosEsporo = {
+                    notificacao_id: notifSalva.id,
                     distribuicao_lesoes: document.getElementById('distribuicao_lesoes').value || '',
-                    locais_lesoes: locaisArray, 
+                    locais_lesoes: locaisSelecionadosStr,
                     humanos_com_lesoes: document.getElementById('humanos_com_lesoes').value || '',
                     outros_animais_com_lesoes: document.getElementById('outros_animais_com_lesoes').value || '',
                     coleta_amostra: document.getElementById('coleta_amostra').value || '',
@@ -233,23 +306,24 @@
                     observacoes: document.getElementById('observacoes').value || ''
                 };
 
-                // Faz uma ÚNICA chamada para o banco de dados
-                const { data, error } = await supabaseClient.rpc('salvar_notificacao_esporotricose', { payload });
-
-                if (error) throw new Error(error.message);
-
-                alert(`✅ Notificação registrada com sucesso!\nNúmero do Registro: ${data.numero_notificacao}`);
-
-                if (confirm("Deseja realizar uma nova notificação?")) {
-                    window.location.href = 'index.html';
-                } else {
-                    document.getElementById('esporo-form').reset();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                let resEsporo = await supabaseClient.from('notificacao_esporotricose').insert([dadosEspecificosEsporo]);
+                
+                if (resEsporo.error) {
+                    resEsporo = await supabaseClient.from('esporotricose').insert([dadosEspecificosEsporo]);
+                    if (resEsporo.error) {
+                        throw new Error("Falha ao salvar dados Clínicos (Tabela Específica): " + resEsporo.error.message);
+                    }
                 }
 
+                // Exibe o Modal de Sucesso em vez de um Alert comum
+                document.getElementById('modal-msg-sucesso').innerHTML = `A Notificação <strong>${numNotificacao}</strong> foi registrada no sistema.`;
+                document.getElementById('modal-step-1').style.display = 'block';
+                document.getElementById('modal-step-2').style.display = 'none';
+                document.getElementById('modal-sucesso').style.display = 'flex';
+
             } catch (error) {
-                console.error("Erro no envio:", error);
-                alert("❌ Ocorreu um problema ao enviar:\n" + error.message);
+                console.error("Erro completo no processo:", error);
+                alert("❌ Ocorreu um problema ao enviar:\n" + error.message + "\n\n(Verifique o Console (F12) para mais detalhes)");
             } finally {
                 btnSubmit.disabled = false;
                 btnSubmit.innerText = 'Enviar Notificação';
