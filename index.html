@@ -13,13 +13,20 @@
         </button>
 
         <div class="header-container">
-            <div class="logo-bar">
+            <!-- Logo Esquerda -->
+            <div class="logo-left">
                 <img src="images/logo_prefeitura.png" alt="Prefeitura Municipal de Sorocaba">
-                <img src="images/logo_zoonoses.jpg" alt="Seção de Controle de Zoonoses">
             </div>
+            
+            <!-- Títulos Centralizados -->
             <div class="header-title-box">
                 <h1>Notificação de Agravos em Saúde Pública (Animais)</h1>
                 <p>Prefeitura Municipal de Sorocaba/SP - Unidade de Vigilância de Zoonoses</p>
+            </div>
+
+            <!-- Logo Direita -->
+            <div class="logo-right">
+                <img src="images/logo_zoonoses.jpg" alt="Seção de Controle de Zoonoses">
             </div>
         </div>
     </header>
@@ -27,8 +34,8 @@
     <main>
         <div class="card">
             <h2>👨‍⚕️ Identificação do Médico Veterinário Notificante</h2>
-            <p style="font-size:0.9rem; color: var(--text-secondary); margin-bottom: 20px;">
-                Seus dados serão gravados com segurança neste dispositivo para agilizar futuras notificações.
+            <p style="font-size:0.9rem; color: var(--text-secondary); margin-bottom: 20px; background-color: var(--primary-light); padding: 12px; border-left: 4px solid var(--primary-color); border-radius: 4px;">
+                Preencha seu Nome e, ao digitar seu <strong>CRMV-SP</strong>, o sistema buscará seus dados salvos para autocompletar os demais campos.
             </p>
 
             <form id="vet-info-form">
@@ -62,8 +69,7 @@
                     <input type="email" id="vet_email" required placeholder="Ex: veterinario@email.com">
                 </div>
 
-                <h2>🐾 Selecione o Agravo para Notificação:</h2>
-                <p class="card-instruction">Clique abaixo sobre a enfermidade correspondente para abrir a ficha de notificação detalhada.</p>
+                <h2 style="margin-top: 30px;">🐾 Selecione o Agravo para Notificação:</h2>
                 <div class="agravos-grid">
                     <button type="button" class="btn-agravo" onclick="irParaAgravo('esporotricose.html')">
                         <span>Esporotricose Animal</span>
