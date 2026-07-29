@@ -30,22 +30,50 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Carrega dados do veterinário caso já estejam salvos na index.html
+    // Lógica de Autopreenchimento Inteligente
     const vetSalvo = localStorage.getItem('vetNotificante');
     if (vetSalvo) {
         try {
             const vet = JSON.parse(vetSalvo);
-            if (document.getElementById('vet_nome')) document.getElementById('vet_nome').value = vet.nome || '';
-            if (document.getElementById('vet_crmv')) document.getElementById('vet_crmv').value = vet.crmv || '';
-            if (document.getElementById('vet_clinica')) document.getElementById('vet_clinica').value = vet.clinica || '';
-            if (document.getElementById('vet_endereco')) document.getElementById('vet_endereco').value = vet.endereco || '';
-            if (document.getElementById('vet_telefone')) document.getElementById('vet_telefone').value = vet.telefone || '';
-            if (document.getElementById('vet_email')) document.getElementById('vet_email').value = vet.email || '';
+            
+            // Verifica se a página foi chamada com a instrução de autopreenchimento (Ex: veio de "Outro Agravo")
+            const urlParams = new URLSearchParams(window.location.search);
+            const shouldAutofill = urlParams.get('autofill') === 'true';
+
+            if (shouldAutofill) {
+                preencherCamposVet(vet);
+            }
+
+            // Monitora o campo CRMV para autocompletar quando o usuário digitar o 2º campo
+            const crmvInput = document.getElementById('vet_crmv');
+            if (crmvInput) {
+                const verificarEPreencher = (e) => {
+                    const crmvDigitado = e.target.value.trim();
+                    // Só autocompleta se o CRMV digitado for exatamente o mesmo que está no LocalStorage
+                    if (crmvDigitado !== '' && crmvDigitado === vet.crmv) {
+                        preencherCamposVet(vet);
+                    }
+                };
+                
+                // Dispara a verificação enquanto digita ou ao sair do campo
+                crmvInput.addEventListener('input', verificarEPreencher);
+                crmvInput.addEventListener('blur', verificarEPreencher);
+            }
         } catch (e) {
             console.error("Erro ao carregar dados salvos do veterinário:", e);
         }
     }
 });
+
+// Função auxiliar para preencher os dados
+function preencherCamposVet(vet) {
+    if (document.getElementById('vet_nome') && !document.getElementById('vet_nome').value) document.getElementById('vet_nome').value = vet.nome || '';
+    if (document.getElementById('vet_crmv') && !document.getElementById('vet_crmv').value) document.getElementById('vet_crmv').value = vet.crmv || '';
+    if (document.getElementById('vet_clinica')) document.getElementById('vet_clinica').value = vet.clinica || '';
+    if (document.getElementById('vet_endereco')) document.getElementById('vet_endereco').value = vet.endereco || '';
+    if (document.getElementById('vet_telefone')) document.getElementById('vet_telefone').value = vet.telefone || '';
+    if (document.getElementById('vet_email')) document.getElementById('vet_email').value = vet.email || '';
+}
 
 // 3. FUNÇÃO GLOBAL PARA NAVEGAR E SALVAR DADOS DO VETERINÁRIO
 window.irParaAgravo = function(paginaDestino) {
