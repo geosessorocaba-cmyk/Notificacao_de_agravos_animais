@@ -1,7 +1,6 @@
 /* ==========================================================================
    SISTEMA DE DESIGN & ESTILOS GLOBAIS
    NOTIFICAÇÃO DE AGRAVOS EM SAÚDE PÚBLICA (ANIMAIS)
-   PREFEITURA MUNICIPAL DE SOROCABA - UNIDADE DE VIGILÂNCIA DE ZOONOSES
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -13,7 +12,7 @@
     --bg-card: #ffffff;
     --bg-header: linear-gradient(135deg, #003366 0%, #004b99 50%, #0056b3 100%);
     --bg-input: #ffffff;
-    --bg-modal-overlay: rgba(15, 23, 42, 0.65);
+    --bg-modal-overlay: rgba(15, 23, 42, 0.75);
     
     --text-primary: #1e293b;
     --text-secondary: #475569;
@@ -49,7 +48,7 @@
     --bg-card: #1e293b;
     --bg-header: linear-gradient(135deg, #090d16 0%, #0f172a 50%, #1e293b 100%);
     --bg-input: #0f172a;
-    --bg-modal-overlay: rgba(0, 0, 0, 0.8);
+    --bg-modal-overlay: rgba(0, 0, 0, 0.85);
     
     --text-primary: #f8fafc;
     --text-secondary: #cbd5e1;
@@ -66,10 +65,6 @@
     --accent-success: #22c55e;
     --accent-success-hover: #16a34a;
     --accent-danger: #ef4444;
-    
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.6);
 }
 
 /* --------------------------------------------------------------------------
@@ -103,123 +98,85 @@ body {
 header {
     background: var(--bg-header);
     color: var(--text-header);
-    padding: 24px 20px;
+    padding: 12px 20px; /* Tarja azul mais fina */
     box-shadow: var(--shadow-md);
     position: relative;
     z-index: 10;
 }
 
 .header-container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    gap: 18px;
-}
-
-/* Barra dos Logos (Prefeitura à esquerda, Lâmpada ao centro, Zoonoses à direita) */
-.logo-bar {
-    display: flex;
     justify-content: space-between;
-    align-items: center;
-    width: 100%;
     gap: 15px;
 }
 
-/* Estilização dos Logos */
-.logo-bar img {
-    height: 85px;
-    max-width: 260px;
+/* Estilização das Divs de Logos */
+.logo-left img, .logo-right img {
+    height: 95px; /* Logos ligeiramente maiores no PC */
+    max-width: 240px;
     object-fit: contain;
     background-color: #ffffff;
-    padding: 8px 14px;
+    padding: 6px 10px;
     border-radius: var(--radius-md);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.logo-bar img:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
-}
-
-/* Botão do Modo Claro/Escuro (Lâmpada) Centralizado entre os Logos */
-.theme-toggle-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.theme-toggle-btn {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.25rem;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    transition: background var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
-    outline: none;
-}
-
-.theme-toggle-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.6);
-    transform: scale(1.08);
-}
-
-.theme-toggle-btn:focus-visible {
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+    transition: transform var(--transition-fast);
 }
 
 /* Caixa dos Títulos Centralizada Horizontal e Verticalmente */
 .header-title-box {
     text-align: center;
+    flex: 1; /* Faz o texto ocupar o espaço central perfeitamente */
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    width: 100%;
+    align-items: center;
 }
 
 .header-title-box h1 {
-    font-size: 1.75rem;
+    font-size: 1.55rem;
     font-weight: 700;
     line-height: 1.3;
     letter-spacing: 0.3px;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .header-title-box p {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 500;
     opacity: 0.95;
     line-height: 1.3;
-    letter-spacing: 0.2px;
 }
 
-/* Subtítulo específico das páginas de Agravos (ex: ESPOROTRICOSE) */
-.header-agravo-badge {
-    display: inline-block;
-    background-color: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+/* Botão do Modo Claro/Escuro (Lâmpada) - Posição PC */
+.theme-toggle-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: #ffffff;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 1rem;
-    font-weight: 700;
-    margin-top: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.15rem;
+    backdrop-filter: blur(6px);
+    transition: background var(--transition-fast), transform var(--transition-fast);
+    outline: none;
+    z-index: 20;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.08);
 }
 
 /* --------------------------------------------------------------------------
@@ -228,7 +185,7 @@ header {
 main {
     max-width: 900px;
     width: 100%;
-    margin: 30px auto;
+    margin: 25px auto;
     padding: 0 20px 50px;
     flex: 1;
 }
@@ -240,7 +197,6 @@ main {
     box-shadow: var(--shadow-md);
     border: 1px solid var(--border-color);
     margin-bottom: 24px;
-    transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
 
 .card h2 {
@@ -250,31 +206,13 @@ main {
     margin-bottom: 20px;
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.card-instruction {
-    font-size: 0.95rem;
-    color: var(--text-secondary);
-    margin-bottom: 22px;
-    line-height: 1.5;
-    background-color: var(--primary-light);
-    padding: 12px 16px;
-    border-radius: var(--radius-sm);
-    border-left: 4px solid var(--primary-color);
 }
 
 /* --------------------------------------------------------------------------
-   5. FORMULÁRIOS, CAMPOS DE ENTRADA E DROPDOWNS
+   5. FORMULÁRIOS E INPUTS
    -------------------------------------------------------------------------- */
 .form-group {
     margin-bottom: 20px;
-}
-
-.form-group:last-child {
-    margin-bottom: 0;
 }
 
 label {
@@ -285,16 +223,9 @@ label {
     color: var(--text-primary);
 }
 
-label span.required {
-    color: var(--accent-danger);
-    margin-left: 3px;
-    font-weight: 700;
-}
-
 input[type="text"],
 input[type="tel"],
 input[type="email"],
-input[type="date"],
 select,
 textarea {
     width: 100%;
@@ -306,37 +237,15 @@ textarea {
     font-size: 1rem;
     font-family: inherit;
     outline: none;
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-/* Estado de foco nos campos */
-input:focus,
-select:focus,
-textarea:focus {
+input:focus, select:focus, textarea:focus {
     border-color: var(--border-focus);
     box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.18);
 }
 
-/* Campos somente leitura ou desabilitados */
-input:disabled,
-select:disabled,
-textarea:disabled {
-    background-color: rgba(0, 0, 0, 0.05);
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-/* Estilização para Selects com opção inicial em branco */
-select option[value=""][disabled] {
-    color: var(--text-muted);
-}
-
-textarea {
-    resize: vertical;
-    min-height: 90px;
-}
-
-/* Grid de Checkboxes para Sinais/Locais de Lesões */
+/* Grid de Checkboxes */
 .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -353,36 +262,19 @@ textarea {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     cursor: pointer;
-    user-select: none;
     font-size: 0.95rem;
     font-weight: 500;
-    transition: border-color var(--transition-fast), background-color var(--transition-fast);
-}
-
-.checkbox-item:hover {
-    border-color: var(--primary-color);
-    background-color: var(--primary-light);
 }
 
 .checkbox-item input[type="checkbox"] {
     width: 18px;
     height: 18px;
     accent-color: var(--primary-color);
-    cursor: pointer;
 }
 
 /* --------------------------------------------------------------------------
-   6. GRID DE BOTÕES DOS AGRAVOS (PÁGINA INICIAL) - FORMATO PROFISSIONAL
+   6. GRID DE BOTÕES (AGRAVOS)
    -------------------------------------------------------------------------- */
-.agravos-section-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin: 30px 0 16px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 24px;
-}
-
 .agravos-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -405,26 +297,14 @@ textarea {
     align-items: center;
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-fast);
-    outline: none;
 }
 
 .btn-agravo:hover {
     border-color: var(--primary-color);
-    border-left-color: var(--primary-hover);
     background-color: var(--primary-light);
-    box-shadow: var(--shadow-md);
     transform: translateY(-2px);
 }
 
-.btn-agravo:active {
-    transform: translateY(0);
-}
-
-.btn-agravo:focus-visible {
-    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.3);
-}
-
-/* Seta indicativa elegante e profissional (sem emoji) */
 .btn-agravo-arrow {
     display: inline-flex;
     align-items: center;
@@ -436,39 +316,25 @@ textarea {
     color: var(--primary-color);
     font-size: 1rem;
     font-weight: bold;
-    transition: background-color var(--transition-fast), transform var(--transition-fast);
-}
-
-.btn-agravo:hover .btn-agravo-arrow {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    transform: translateX(4px);
 }
 
 /* --------------------------------------------------------------------------
-   7. MODAL / POPUP DE CONFIRMAÇÃO DE DADOS
+   7. MODAL DE CONFIRMAÇÃO E SUCESSO
    -------------------------------------------------------------------------- */
 .modal-overlay {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     background-color: var(--bg-modal-overlay);
     z-index: 1000;
     justify-content: center;
     align-items: center;
     padding: 20px;
     backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
     animation: fadeIn var(--transition-fast);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .modal-content {
     background-color: var(--bg-card);
@@ -479,59 +345,6 @@ textarea {
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--border-color);
     text-align: center;
-    animation: slideUp var(--transition-fast);
-}
-
-@keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-.modal-content h3 {
-    color: var(--primary-color);
-    font-size: 1.35rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.modal-content p {
-    color: var(--text-secondary);
-    font-size: 0.98rem;
-    margin-bottom: 22px;
-}
-
-.modal-info-box {
-    background-color: var(--bg-input);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    text-align: left;
-    margin-bottom: 24px;
-    font-size: 0.95rem;
-}
-
-.modal-info-row {
-    margin-bottom: 8px;
-    display: flex;
-    flex-direction: column;
-}
-
-.modal-info-row:last-child {
-    margin-bottom: 0;
-}
-
-.modal-info-label {
-    font-size: 0.82rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-muted);
-    font-weight: 700;
-}
-
-.modal-info-value {
-    font-weight: 600;
-    color: var(--text-primary);
-    word-break: break-word;
 }
 
 .modal-buttons {
@@ -549,12 +362,9 @@ textarea {
     font-size: 0.98rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color var(--transition-fast);
 }
 
-.btn-modal-cancel:hover {
-    background-color: var(--border-color);
-}
+.btn-modal-cancel:hover { background-color: var(--border-color); }
 
 .btn-modal-confirm {
     flex: 1;
@@ -566,15 +376,12 @@ textarea {
     font-size: 0.98rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color var(--transition-fast);
 }
 
-.btn-modal-confirm:hover {
-    background-color: var(--primary-hover);
-}
+.btn-modal-confirm:hover { background-color: var(--primary-hover); }
 
 /* --------------------------------------------------------------------------
-   8. BOTÕES DE AÇÃO E ENVIO DE FORMULÁRIO
+   8. BOTÕES DE AÇÃO GERAIS
    -------------------------------------------------------------------------- */
 .btn-submit {
     background-color: var(--accent-success);
@@ -588,19 +395,9 @@ textarea {
     width: 100%;
     margin-top: 15px;
     box-shadow: var(--shadow-sm);
-    transition: background-color var(--transition-fast), transform var(--transition-fast);
 }
 
-.btn-submit:hover {
-    background-color: var(--accent-success-hover);
-    transform: translateY(-1px);
-}
-
-.btn-submit:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-}
+.btn-submit:hover { background-color: var(--accent-success-hover); }
 
 .btn-back {
     display: inline-flex;
@@ -615,153 +412,51 @@ textarea {
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
-    margin-bottom: 20px;
     transition: background-color var(--transition-fast);
 }
 
-.btn-back:hover {
-    background-color: var(--primary-light);
-    border-color: var(--primary-color);
-}
+.btn-back:hover { background-color: var(--primary-light); }
 
 /* --------------------------------------------------------------------------
-   9. AJUSTES RESPONSIVOS (DISPOSITIVOS MÓVEIS E TABLETS)
+   9. RESPONSIVIDADE (CELULARES E TABLETS)
    -------------------------------------------------------------------------- */
-
-/* Tablets e Monitores Pequenos (Até 820px) */
-@media (max-width: 820px) {
+@media (max-width: 768px) {
+    /* Ajustes Mobile no Cabeçalho */
     header {
-        padding: 20px 15px;
+        padding: 45px 12px 12px; /* Espaço no topo para o botão da lua/sol não sobrepor */
     }
 
-    .logo-bar img {
-        height: 70px;
-        max-width: 200px;
-        padding: 6px 10px;
-    }
-
-    .header-title-box h1 {
-        font-size: 1.45rem;
-    }
-
-    .header-title-box p {
-        font-size: 1.05rem;
-    }
-
-    .card {
-        padding: 24px 20px;
-    }
-}
-
-/* Celulares e Telas Estreitas (Até 580px) */
-@media (max-width: 580px) {
-    header {
-        padding: 16px 12px;
+    .theme-toggle-btn {
+        top: 6px;
+        left: 50%;
+        transform: translateX(-50%); /* Centraliza perfeitamente no topo */
     }
 
     .header-container {
-        gap: 14px;
-    }
-
-    /* Expansão lateral das imagens dos logos mantendo centralidade */
-    .logo-bar {
         gap: 8px;
     }
 
-    .logo-bar img {
-        height: 58px;
-        max-width: 140px;
-        padding: 5px 8px;
-        border-radius: var(--radius-sm);
+    .logo-left img, .logo-right img {
+        height: 65px; /* Tamanho ajustado para celular para não quebrar */
+        max-width: 100px;
+        padding: 4px 6px;
     }
 
-    /* O botão da lâmpada fica perfeitamente proporcional entre os dois logos */
-    .theme-toggle-btn {
-        width: 38px;
-        height: 38px;
-        font-size: 1.1rem;
-    }
+    .header-title-box h1 { font-size: 1.15rem; line-height: 1.25; }
+    .header-title-box p { font-size: 0.85rem; line-height: 1.2; }
 
-    .header-title-box h1 {
-        font-size: 1.25rem;
-        line-height: 1.25;
-    }
-
-    .header-title-box p {
-        font-size: 0.92rem;
-        line-height: 1.25;
-    }
-
-    .header-agravo-badge {
-        font-size: 0.85rem;
-        padding: 4px 12px;
-    }
-
-    main {
-        padding: 0 12px 30px;
-        margin: 18px auto;
-    }
-
-    .card {
-        padding: 20px 15px;
-        border-radius: var(--radius-md);
-    }
-
-    .card h2 {
-        font-size: 1.15rem;
-    }
-
-    /* Botões dos Agravos em Coluna Única no Celular */
-    .agravos-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-
-    .btn-agravo {
-        padding: 18px 16px;
-        font-size: 1rem;
-    }
-
-    .checkbox-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .modal-buttons {
-        flex-direction: column;
-    }
-
-    .btn-modal-cancel,
-    .btn-modal-confirm {
-        width: 100%;
-    }
+    main { padding: 0 12px 30px; margin: 15px auto; }
+    .card { padding: 20px 15px; }
+    
+    .agravos-grid { grid-template-columns: 1fr; }
+    .modal-buttons { flex-direction: column; }
 }
 
 /* --------------------------------------------------------------------------
-   10. REGRAS PARA IMPRESSÃO (PRINT)
+   10. IMPRESSÃO
    -------------------------------------------------------------------------- */
 @media print {
-    body {
-        background: #ffffff !important;
-        color: #000000 !important;
-    }
-
-    header {
-        background: #ffffff !important;
-        color: #000000 !important;
-        box-shadow: none !important;
-        border-bottom: 2px solid #000000;
-    }
-
-    .theme-toggle-container,
-    .btn-submit,
-    .btn-back,
-    .modal-overlay {
-        display: none !important;
-    }
-
-    .card {
-        box-shadow: none !important;
-        border: 1px solid #cccccc !important;
-        page-break-inside: avoid;
-    }
+    body { background: #ffffff !important; color: #000000 !important; }
+    header { box-shadow: none !important; border-bottom: 2px solid #000000; }
+    .theme-toggle-btn, .btn-submit, .btn-back, .modal-overlay { display: none !important; }
 }
