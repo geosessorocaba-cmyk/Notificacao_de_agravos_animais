@@ -18,7 +18,6 @@ window.toggleDarkMode = function() {
     }
 };
 
-// 2. INICIALIZAÇÃO DA PÁGINA E RECUPERAÇÃO DE DADOS
 
 // ==========================================================================
 // MÁSCARAS E VALIDAÇÕES DE INPUT
@@ -58,7 +57,13 @@ function aplicarMascaras() {
         });
     });
 }
+
+// 2. INICIALIZAÇÃO DA PÁGINA E RECUPERAÇÃO DE DADOS
 document.addEventListener('DOMContentLoaded', () => {
+    
+    // Ativa as máscaras em todos os campos assim que a página carregar
+    aplicarMascaras(); 
+    
     // Restaura o tema salvo
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
