@@ -19,6 +19,45 @@ window.toggleDarkMode = function() {
 };
 
 // 2. INICIALIZAÇÃO DA PÁGINA E RECUPERAÇÃO DE DADOS
+
+// ==========================================================================
+// MÁSCARAS E VALIDAÇÕES DE INPUT
+// ==========================================================================
+
+function aplicarMascaras() {
+    // 1. Máscara para CPF (000.000.000-00)
+    const cpfs = document.querySelectorAll('#tutor_cpf');
+    cpfs.forEach(input => {
+        input.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, ""); // Remove tudo o que não for número
+            if (v.length > 11) v = v.slice(0, 11); // Limita a 11 dígitos
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d)/, "$1.$2");
+            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            e.target.value = v;
+        });
+    });
+
+    // 2. Máscara para Telefones: (00) 00000-0000 ou (00) 0000-0000
+    const telefones = document.querySelectorAll('input[type="tel"]');
+    telefones.forEach(input => {
+        input.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, "");
+            if (v.length > 11) v = v.slice(0, 11);
+            v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+            v = v.replace(/(\d)(\d{4})$/, "$1-$2");
+            e.target.value = v;
+        });
+    });
+
+    // 3. Bloqueio total de letras (Apenas Números) para CRMV e Número da Casa
+    const numerosGerais = document.querySelectorAll('#vet_crmv, #tutor_numero');
+    numerosGerais.forEach(input => {
+        input.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, "");
+        });
+    });
+}
 document.addEventListener('DOMContentLoaded', () => {
     // Restaura o tema salvo
     const savedTheme = localStorage.getItem('theme');
