@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notificação de Esporotricose - Sorocaba</title>
     <link rel="stylesheet" href="../css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header>
@@ -194,12 +193,18 @@
 
     </main>
 
+    <!-- 1º: Importar a biblioteca oficial do Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- 2º: Importar o arquivo central com as credenciais (usando ../ por estar dentro de /agravos/) -->
+    <script src="../js/supabase.js"></script>
+
+    <!-- 3º: Importar o app.js geral -->
     <script src="../js/app.js"></script>
+
     <script>
-        // CONFIGURAÇÃO DO SUPABASE
-        const SUPABASE_URL = 'https://iwohicnazfxtysetelpz.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3b2hpY25hemZ4dHlzZXRlbHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5MDgyNzYsImV4cCI6MjEwMDQ4NDI3Nn0.x8QrBDzCV-qqhkv7zLZYB7FH04NT6CKOcjQOio9TglI';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Mapeia supabaseClient para o objeto global criado em ../js/supabase.js
+        const supabaseClient = supabase;
 
         let vetData = null;
 
@@ -222,7 +227,6 @@
         // LÓGICA DE NAVEGAÇÃO DO MODAL
         window.escolhaNovaNotificacao = function(escolha) {
             if (escolha === 'nao') {
-                // Redireciona para o index. Como tiramos o autocompletar no carregamento, a tela virá zerada.
                 window.location.href = '../index.html'; 
             } else if (escolha === 'sim') {
                 document.getElementById('modal-step-1').style.display = 'none';
@@ -232,7 +236,6 @@
                 document.getElementById('modal-sucesso').style.display = 'none';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else if (escolha === 'outro') {
-                // Retorna ao index avisando para Autocompletar o veterinário para agilizar
                 window.location.href = '../index.html?autofill=true';
             }
         };
@@ -312,19 +315,17 @@
                     resEsporo = await supabaseClient.from('esporotricose').insert([dadosEspecificosEsporo]);
                     
                     if (resEsporo.error) {
-                        // 👇 INÍCIO DA GARANTIA DE CONSISTÊNCIA 👇
-                        // Se a inserção na tabela específica falhar, deletamos o registro "pai" da tabela geral
+                        // 👇 GARANTIA DE CONSISTÊNCIA 👇
                         await supabaseClient
                             .from('notificacoes')
                             .delete()
                             .eq('id', notifSalva.id);
-                        // 👆 FIM DA GARANTIA DE CONSISTÊNCIA 👆
                         
                         throw new Error("Falha ao salvar dados Clínicos (Tabela Específica): " + resEsporo.error.message + ". A notificação principal foi desfeita para evitar registros incompletos.");
                     }
                 }
 
-                // Exibe o Modal de Sucesso em vez de um Alert comum
+                // Exibe o Modal de Sucesso
                 document.getElementById('modal-msg-sucesso').innerHTML = `A Notificação <strong>${numNotificacao}</strong> foi registrada no sistema.`;
                 document.getElementById('modal-step-1').style.display = 'block';
                 document.getElementById('modal-step-2').style.display = 'none';
