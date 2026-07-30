@@ -215,7 +215,7 @@
 
             if (!vetData || !vetData.nome || !vetData.crmv || !vetData.telefone || !vetData.email) {
                 alert("Aviso: Os dados completos do Médico Veterinário não foram encontrados.\nPor favor, preencha-os novamente na tela inicial.");
-                window.location.href = 'index.html';
+                window.location.href = '../index.html';
             }
         });
 
@@ -223,7 +223,7 @@
         window.escolhaNovaNotificacao = function(escolha) {
             if (escolha === 'nao') {
                 // Redireciona para o index. Como tiramos o autocompletar no carregamento, a tela virá zerada.
-                window.location.href = 'index.html'; 
+                window.location.href = '../index.html'; 
             } else if (escolha === 'sim') {
                 document.getElementById('modal-step-1').style.display = 'none';
                 document.getElementById('modal-step-2').style.display = 'block';
@@ -233,7 +233,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else if (escolha === 'outro') {
                 // Retorna ao index avisando para Autocompletar o veterinário para agilizar
-                window.location.href = 'index.html?autofill=true';
+                window.location.href = '../index.html?autofill=true';
             }
         };
 
