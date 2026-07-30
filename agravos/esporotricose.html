@@ -193,18 +193,17 @@
 
     </main>
 
-    <!-- 1º: Importar a biblioteca oficial do Supabase -->
+<!-- 1º: Importar a biblioteca oficial do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- 2º: Importar o arquivo central com as credenciais (usando ../ por estar dentro de /agravos/) -->
+    <!-- 2º: Importar o arquivo central com as credenciais -->
     <script src="../js/supabase.js"></script>
 
     <!-- 3º: Importar o app.js geral -->
     <script src="../js/app.js"></script>
 
     <script>
-        // Mapeia supabaseClient para o objeto global criado em ../js/supabase.js
-        const supabaseClient = supabase;
+        // A partir daqui, 'supabaseClient' já está pronto e global graças ao supabase.js
 
         let vetData = null;
 
