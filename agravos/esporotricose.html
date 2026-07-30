@@ -310,8 +310,17 @@
                 
                 if (resEsporo.error) {
                     resEsporo = await supabaseClient.from('esporotricose').insert([dadosEspecificosEsporo]);
+                    
                     if (resEsporo.error) {
-                        throw new Error("Falha ao salvar dados Clínicos (Tabela Específica): " + resEsporo.error.message);
+                        // 👇 INÍCIO DA GARANTIA DE CONSISTÊNCIA 👇
+                        // Se a inserção na tabela específica falhar, deletamos o registro "pai" da tabela geral
+                        await supabaseClient
+                            .from('notificacoes')
+                            .delete()
+                            .eq('id', notifSalva.id);
+                        // 👆 FIM DA GARANTIA DE CONSISTÊNCIA 👆
+                        
+                        throw new Error("Falha ao salvar dados Clínicos (Tabela Específica): " + resEsporo.error.message + ". A notificação principal foi desfeita para evitar registros incompletos.");
                     }
                 }
 
