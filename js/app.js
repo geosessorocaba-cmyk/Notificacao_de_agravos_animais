@@ -103,5 +103,5 @@ window.irParaAgravo = function(paginaDestino) {
     localStorage.setItem('vetNotificante', JSON.stringify(dadosVet));
 
     // Redireciona para a página correspondente
-    window.location.href = paginaDestino;
+    window.location.href = '../index.html'
 };
