@@ -245,10 +245,49 @@
             }
         };
 
+        // --- LÓGICA DINÂMICA DE LESÕES ---
+        const checkboxesLocais = document.querySelectorAll('input[name="locais"]');
+        const selectDistribuicao = document.getElementById('distribuicao_lesoes');
+        const avisoOutros = document.getElementById('aviso-outros');
+        
+        checkboxesLocais.forEach(cb => {
+            cb.addEventListener('change', () => {
+                // Conta quantas caixinhas estão marcadas
+                const checkedCount = document.querySelectorAll('input[name="locais"]:checked').length;
+                
+                // Verifica se a caixinha "Outros" específica está marcada
+                const isOutrosChecked = document.querySelector('input[name="locais"][value="Outros"]').checked;
+                
+                // Mostra ou esconde a mensagem de aviso logo abaixo das caixinhas
+                avisoOutros.style.display = isOutrosChecked ? 'block' : 'none';
+        
+                // Altera o select principal baseado na quantidade
+                if (checkedCount === 0) {
+                    selectDistribuicao.value = "Sem lesão aparente";
+                } else if (checkedCount === 1) {
+                    selectDistribuicao.value = "Única";
+                } else if (checkedCount >= 2 && checkedCount <= 5) {
+                    selectDistribuicao.value = "Múltipla (até 5)";
+                } else if (checkedCount === 6) {
+                    selectDistribuicao.value = "Disseminada (acima de 5)";
+                }
+            });
+        });
+
         // ENVIO DO FORMULÁRIO
         document.getElementById('esporo-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            // VALIDAÇÃO OBRIGATÓRIA DE "OUTROS" ANTES DE ENVIAR
+            const isOutrosChecked = document.querySelector('input[name="locais"][value="Outros"]')?.checked;
+            const observacoesText = document.getElementById('observacoes').value.trim();
+        
+            if (isOutrosChecked && observacoesText === "") {
+                alert('Você selecionou "Outros" em Locais predominantes das Lesões, por favor detalhe Outros no campo "Observações Adicionais" antes de enviar a notificação.');
+                document.getElementById('observacoes').focus(); // Leva o cursor do usuário direto para o campo
+                return; // Interrompe o processo de envio aqui mesmo
+            }
+        
             const btnSubmit = document.getElementById('btn-submit');
             btnSubmit.disabled = true;
             btnSubmit.innerText = 'Enviando Notificação... Aguarde';
