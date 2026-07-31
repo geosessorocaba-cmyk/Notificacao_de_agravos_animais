@@ -29,6 +29,7 @@
     --accent-success: #16a34a;
     --accent-success-hover: #15803d;
     --accent-danger: #dc2626;
+    --accent-warning-text: #c53030; /* Vermelho escuro/legível no modo claro */
     
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -65,6 +66,7 @@
     --accent-success: #22c55e;
     --accent-success-hover: #16a34a;
     --accent-danger: #ef4444;
+    --accent-warning-text: #fca5a5; /* Vermelho claro/suave no modo escuro */
 }
 
 /* --------------------------------------------------------------------------
