@@ -100,13 +100,14 @@
                 <div class="form-group">
                     <label for="distribuicao_lesoes">Distribuição das Lesões *</label>
                     <select id="distribuicao_lesoes" required>
+                        <option value="" disabled selected>Selecione uma opção</option>
                         <option value="Única">Única</option>
                         <option value="Múltipla (até 5)">Múltipla (até 5)</option>
                         <option value="Disseminada (acima de 5)">Disseminada (acima de 5)</option>
                         <option value="Sem lesão aparente">Sem lesão aparente</option>
                     </select>
                 </div>
-
+                
                 <div class="form-group">
                     <label>Locais Predominantes das Lesões</label>
                     <div class="checkbox-grid">
@@ -115,6 +116,11 @@
                         <label class="checkbox-item"><input type="checkbox" name="locais" value="Membros anteriores"> Membros anteriores</label>
                         <label class="checkbox-item"><input type="checkbox" name="locais" value="Membros posteriores"> Membros posteriores</label>
                         <label class="checkbox-item"><input type="checkbox" name="locais" value="Cauda"> Cauda</label>
+                        <label class="checkbox-item"><input type="checkbox" name="locais" value="Outros"> Outros</label>
+                    </div>
+                    <!-- Alerta de Outros (Invisível por padrão) -->
+                    <div id="aviso-outros" style="display: none; margin-top: 12px; font-size: 0.9rem; font-weight: 600; color: var(--accent-warning-text);">
+                        ⚠️ Detalhe "Outros" no campo "Observações adicionais"
                     </div>
                 </div>
 
