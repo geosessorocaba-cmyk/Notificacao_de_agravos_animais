@@ -62,7 +62,6 @@ function aplicarMascaras() {
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Ativa as máscaras em todos os campos assim que a página carregar
     aplicarMascaras(); 
     
     // Restaura o tema salvo
@@ -81,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const vet = JSON.parse(vetSalvo);
             
-            // Verifica se a página foi chamada com a instrução de autopreenchimento
             const urlParams = new URLSearchParams(window.location.search);
             const shouldAutofill = urlParams.get('autofill') === 'true';
 
@@ -89,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 preencherCamposVet(vet);
             }
 
-            // Monitora o campo CRMV para autocompletar
             const crmvInput = document.getElementById('vet_crmv');
             if (crmvInput) {
                 const verificarEPreencher = (e) => {
@@ -107,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- NOVA INTEGRAÇÃO: ENVIO PARA O SUPABASE AO SUBMETER O FORMULÁRIO ---
+    // --- INTEGRAÇÃO: ENVIO PARA O SUPABASE AO SUBMETER O FORMULÁRIO ---
     const formEsporotricose = document.getElementById('form-esporotricose');
 
     if (formEsporotricose) {
@@ -118,78 +115,95 @@ document.addEventListener('DOMContentLoaded', () => {
             const textoOriginalBtn = btnSubmit ? btnSubmit.innerText : 'Enviar';
 
             try {
-                // Bloqueia o botão
                 if (btnSubmit) {
                     btnSubmit.disabled = true;
                     btnSubmit.innerText = 'Enviando notificação...';
                 }
 
-                // Coleta os locais das lesões em formato Array
-                const locaisLesoesChecked = Array.from(
-                    document.querySelectorAll('input[name="locais_lesoes"]:checked')
-                ).map(cb => cb.value);
-
-                // Recupera os dados do veterinário salvos pela função irParaAgravo()
-                const vetDados = JSON.parse(localStorage.getItem('vetNotificante')) || {};
-
-                // Estrutura o payload exatamente como a sua função SQL exige
-                const payload = {
-                    p_numero_notificacao: document.getElementById('numero_notificacao')?.value || `ESP-${Date.now()}`,
-                    p_agravo: 'Esporotricose',
-                    p_ano: new Date().getFullYear(),
-
-                    p_vet_nome: vetDados.nome || document.getElementById('vet_nome')?.value || '',
-                    p_vet_crmv: vetDados.crmv || document.getElementById('vet_crmv')?.value || '',
-                    p_vet_clinica: vetDados.clinica || document.getElementById('vet_clinica')?.value || '',
-                    p_vet_endereco: vetDados.endereco || document.getElementById('vet_endereco')?.value || '',
-                    p_vet_telefone: vetDados.telefone || document.getElementById('vet_telefone')?.value || '',
-                    p_vet_email: vetDados.email || document.getElementById('vet_email')?.value || '',
-
-                    p_tutor_nome: document.getElementById('tutor_nome')?.value || '',
-                    p_tutor_cpf: document.getElementById('tutor_cpf')?.value || '',
-                    p_tutor_telefone: document.getElementById('tutor_telefone')?.value || '',
-                    p_tutor_endereco: document.getElementById('tutor_endereco')?.value || '',
-                    p_tutor_numero: document.getElementById('tutor_numero')?.value || '',
-                    p_tutor_complemento: document.getElementById('tutor_complemento')?.value || '',
-                    p_tutor_bairro: document.getElementById('tutor_bairro')?.value || '',
-                    p_tutor_municipio: document.getElementById('tutor_municipio')?.value || 'Sorocaba',
-
-                    p_animal_nome: document.getElementById('animal_nome')?.value || '',
-                    p_animal_especie: document.getElementById('animal_especie')?.value || '',
-                    p_animal_raca: document.getElementById('animal_raca')?.value || '',
-                    p_animal_sexo: document.getElementById('animal_sexo')?.value || '',
-                    p_animal_idade: document.getElementById('animal_idade')?.value || '',
-
-                    p_distribuicao_lesoes: document.querySelector('input[name="distribuicao_lesoes"]:checked')?.value || '',
-                    p_locais_lesoes: locaisLesoesChecked, 
-                    p_humanos_com_lesoes: document.querySelector('input[name="humanos_com_lesoes"]:checked')?.value || '',
-                    p_outros_animais_com_lesoes: document.querySelector('input[name="outros_animais_com_lesoes"]:checked')?.value || '',
-                    p_coleta_amostra: document.querySelector('input[name="coleta_amostra"]:checked')?.value || '',
-                    p_tratamento_iniciado: document.querySelector('input[name="tratamento_iniciado"]:checked')?.value || '',
-                    p_tratamento_detalhes: document.getElementById('tratamento_detalhes')?.value || '',
-                    p_observacoes: document.getElementById('observacoes')?.value || ''
+                // Função auxiliar inteligente para buscar valores (seja input text, select ou radio)
+                const getVal = (name) => {
+                    const el = document.getElementById(name);
+                    if (el && (el.tagName === 'SELECT' || el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && el.type !== 'radio' && el.type !== 'checkbox'))) {
+                        return el.value;
+                    }
+                    const radio = document.querySelector(`input[name="${name}"]:checked`);
+                    return radio ? radio.value : '';
                 };
 
-                // Chamada RPC do Supabase
-                const { data, error } = await supabase.rpc('inserir_notificacao_esporotricose_acid', payload);
+                // Coleta dados de múltipla escolha (arrays)
+                const locaisLesoesChecked = Array.from(document.querySelectorAll('input[name="locais_lesoes"]:checked')).map(cb => cb.value);
+                const sinaisClinicosChecked = Array.from(document.querySelectorAll('input[name="sinais_clinicos"]:checked')).map(cb => cb.value);
+
+                // Recupera os dados do veterinário salvos
+                const vetDados = JSON.parse(localStorage.getItem('vetNotificante')) || {};
+
+                // Estrutura o novo payload JSON (sem os prefixos p_)
+                const payload = {
+                    vet_nome: vetDados.nome || getVal('vet_nome'),
+                    vet_crmv: vetDados.crmv || getVal('vet_crmv'),
+                    vet_clinica: vetDados.clinica || getVal('vet_clinica'),
+                    vet_endereco: vetDados.endereco || getVal('vet_endereco'),
+                    vet_telefone: vetDados.telefone || getVal('vet_telefone'),
+                    vet_email: vetDados.email || getVal('vet_email'),
+
+                    tutor_nome: getVal('tutor_nome'),
+                    tutor_cpf: getVal('tutor_cpf'),
+                    tutor_telefone: getVal('tutor_telefone'),
+                    tutor_endereco: getVal('tutor_endereco'),
+                    tutor_numero: getVal('tutor_numero'),
+                    tutor_complemento: getVal('tutor_complemento'),
+                    tutor_bairro: getVal('tutor_bairro'),
+                    tutor_municipio: getVal('tutor_municipio') || 'Sorocaba',
+
+                    animal_nome: getVal('animal_nome'),
+                    animal_especie: getVal('animal_especie'),
+                    animal_raca: getVal('animal_raca'),
+                    animal_sexo: getVal('animal_sexo'),
+                    animal_idade: getVal('animal_idade'),
+                    animal_peso: getVal('animal_peso'),
+                    animal_tamanho_pelo: getVal('animal_tamanho_pelo'),
+                    animal_cor_pelagem: getVal('animal_cor_pelagem'),
+                    animal_castrado: getVal('animal_castrado'),
+                    animal_comportamento: getVal('animal_comportamento'),
+                    animal_condicao_fisica: getVal('animal_condicao_fisica'),
+
+                    ambiente_moradia: getVal('ambiente_moradia'),
+                    classificacao_habitacao: getVal('classificacao_habitacao'),
+                    data_inicio_sinais: getVal('data_inicio_sinais') || null, 
+                    lesao_pele: getVal('lesao_pele'),
+                    
+                    distribuicao_lesoes: getVal('distribuicao_lesoes'),
+                    humanos_com_lesoes: getVal('humanos_com_lesoes'),
+                    outros_animais_com_lesoes: getVal('outros_animais_com_lesoes'),
+                    coleta_amostra: getVal('coleta_amostra'),
+                    tratamento_iniciado: getVal('tratamento_iniciado'),
+                    tratamento_detalhes: getVal('tratamento_detalhes'),
+                    observacoes: getVal('observacoes'),
+
+                    sinais_clinicos: sinaisClinicosChecked,
+                    locais_lesoes: locaisLesoesChecked 
+                };
+
+                // Chamada RPC do Supabase usando a função definitiva JSON e o client global
+                const { data, error } = await window.supabaseClient.rpc('salvar_notificacao_esporotricose_acid', { payload: payload });
 
                 if (error) {
                     throw new Error(error.message);
                 }
 
-                if (data && data.status === 'sucesso') {
-                    alert(`Sucesso! Notificação registrada sob ID: ${data.notificacao_id}`);
+                // A nova função SQL retorna 'sucesso' como boolean (true/false)
+                if (data && data.sucesso === true) {
+                    alert(`Sucesso! Notificação registrada sob o número: ${data.numero_notificacao}`);
                     formEsporotricose.reset();
                     // Opcional: window.location.href = 'index.html';
                 } else {
-                    alert(`Atenção: ${data?.mensagem || 'Erro desconhecido.'}`);
+                    alert(`Atenção: ${data?.erro || 'Erro desconhecido ao salvar.'}`);
                 }
 
             } catch (err) {
                 console.error('Erro na gravação:', err);
                 alert(`Falha ao registrar notificação: ${err.message}`);
             } finally {
-                // Restaura o botão
                 if (btnSubmit) {
                     btnSubmit.disabled = false;
                     btnSubmit.innerText = textoOriginalBtn;
