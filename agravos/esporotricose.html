@@ -32,6 +32,7 @@
         </div>
 
         <form id="esporo-form">
+            <!-- DADOS DO TUTOR -->
             <div class="card">
                 <h2>👤 Dados do Tutor / Proprietário</h2>
                 <div class="form-group">
@@ -64,6 +65,7 @@
                 </div>
             </div>
 
+            <!-- DADOS DO ANIMAL -->
             <div class="card">
                 <h2>🐾 Dados do Animal</h2>
                 <div class="form-group">
@@ -84,49 +86,142 @@
                 </div>
                 <div class="form-group">
                     <label for="animal_idade">Idade</label>
-                    <input type="text" id="animal_idade" placeholder="Ex: 2 anos">
+                    <input type="text" id="animal_idade" placeholder="Ex: 2 anos, 6 meses...">
+                </div>
+                <div class="form-group">
+                    <label for="animal_peso">Peso (kg)</label>
+                    <input type="text" id="animal_peso" placeholder="Ex: 4.5">
                 </div>
                 <div class="form-group">
                     <label for="animal_sexo">Sexo</label>
                     <select id="animal_sexo">
+                        <option value="">Selecione...</option>
                         <option value="MACHO">Macho</option>
                         <option value="FÊMEA">Fêmea</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="animal_castrado">O animal é castrado?</label>
+                    <select id="animal_castrado">
+                        <option value="">Selecione...</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                        <option value="Não sei">Não sei</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="animal_tamanho_pelo">Tamanho da Pelagem</label>
+                    <select id="animal_tamanho_pelo">
+                        <option value="">Selecione...</option>
+                        <option value="Curto">Curto</option>
+                        <option value="Médio">Médio</option>
+                        <option value="Longo">Longo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="animal_cor_pelagem">Cor da Pelagem</label>
+                    <input type="text" id="animal_cor_pelagem" placeholder="Ex: Tigrado, Preto, Branco...">
+                </div>
+                <div class="form-group">
+                    <label for="animal_condicao_fisica">Condição Física</label>
+                    <select id="animal_condicao_fisica">
+                        <option value="">Selecione...</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Magro">Magro</option>
+                        <option value="Caquético">Caquético</option>
+                        <option value="Obeso">Obeso</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="animal_comportamento">Comportamento</label>
+                    <select id="animal_comportamento">
+                        <option value="">Selecione...</option>
+                        <option value="Dócil">Dócil</option>
+                        <option value="Assustado">Assustado</option>
+                        <option value="Agressivo">Agressivo</option>
+                    </select>
+                </div>
             </div>
 
+            <!-- DADOS DO AMBIENTE -->
+            <div class="card">
+                <h2>🏡 Ambiente e Moradia</h2>
+                <div class="form-group">
+                    <label for="ambiente_moradia">Tipo de Moradia</label>
+                    <select id="ambiente_moradia">
+                        <option value="">Selecione...</option>
+                        <option value="Casa">Casa</option>
+                        <option value="Apartamento">Apartamento</option>
+                        <option value="Sítio/Chácara">Sítio/Chácara</option>
+                        <option value="Empresa">Empresa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="classificacao_habitacao">Classificação do Acesso</label>
+                    <select id="classificacao_habitacao">
+                        <option value="">Selecione...</option>
+                        <option value="Totalmente domiciliado (sem acesso à rua)">Totalmente domiciliado (sem acesso à rua)</option>
+                        <option value="Semi-domiciliado (com acesso à rua)">Semi-domiciliado (com acesso à rua)</option>
+                        <option value="Animal de rua (comunitário)">Animal de rua (comunitário)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- DADOS CLÍNICOS -->
             <div class="card">
                 <h2>🩺 Dados Clínicos e Epidemiológicos</h2>
+                
                 <div class="form-group">
-                    <label for="distribuicao_lesoes">Distribuição das Lesões *</label>
-                    <select id="distribuicao_lesoes" required>
-                        <option value="" disabled selected>Selecione uma opção</option>
+                    <label for="data_inicio_sinais">Data de Início dos Sinais Clínicos</label>
+                    <input type="date" id="data_inicio_sinais">
+                </div>
+
+                <div class="form-group">
+                    <label for="lesao_pele">Apresenta Lesão de Pele?</label>
+                    <select id="lesao_pele">
+                        <option value="">Selecione...</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="distribuicao_lesoes">Distribuição das Lesões</label>
+                    <select id="distribuicao_lesoes">
+                        <option value="">Selecione...</option>
                         <option value="Única">Única</option>
                         <option value="Múltipla (até 5)">Múltipla (até 5)</option>
                         <option value="Disseminada (acima de 5)">Disseminada (acima de 5)</option>
                         <option value="Sem lesão aparente">Sem lesão aparente</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Locais Predominantes das Lesões</label>
                     <div class="checkbox-grid">
-                        <label class="checkbox-item"><input type="checkbox" name="locais" value="Cabeça"> Cabeça</label>
-                        <label class="checkbox-item"><input type="checkbox" name="locais" value="Corpo"> Corpo</label>
-                        <label class="checkbox-item"><input type="checkbox" name="locais" value="Membros anteriores"> Membros anteriores</label>
-                        <label class="checkbox-item"><input type="checkbox" name="locais" value="Membros posteriores"> Membros posteriores</label>
-                        <label class="checkbox-item"><input type="checkbox" name="locais" value="Cauda"> Cauda</label>
-                        <label class="checkbox-item"><input type="checkbox" name="locais" value="Outros"> Outros</label>
+                        <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Cabeça"> Cabeça</label>
+                        <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Corpo"> Corpo</label>
+                        <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Membros anteriores"> Membros ant.</label>
+                        <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Membros posteriores"> Membros post.</label>
+                        <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Cauda"> Cauda</label>
                     </div>
-                    <!-- Alerta de Outros (Invisível por padrão) -->
-                    <div id="aviso-outros" style="display: none; margin-top: 12px; font-size: 0.9rem; font-weight: 600; color: var(--accent-warning-text);">
-                        ⚠️ Detalhe "Outros" no campo "Observações adicionais"
+                </div>
+
+                <div class="form-group">
+                    <label>Outros Sinais Clínicos Apresentados</label>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Espirros"> Espirros</label>
+                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Secreção Nasal"> Secreção Nasal</label>
+                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Apatia"> Apatia</label>
+                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Anorexia/Emagrecimento"> Anorexia/Emagrecimento</label>
+                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Linfadenomegalia"> Linfadenomegalia</label>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="humanos_com_lesoes">Há pessoas na residência com lesões de pele?</label>
                     <select id="humanos_com_lesoes">
+                        <option value="">Selecione...</option>
                         <option value="Não">Não</option>
                         <option value="Sim">Sim</option>
                         <option value="Não sei informar">Não sei informar</option>
@@ -136,6 +231,7 @@
                 <div class="form-group">
                     <label for="outros_animais_com_lesoes">Outros animais na residência com lesões?</label>
                     <select id="outros_animais_com_lesoes">
+                        <option value="">Selecione...</option>
                         <option value="Não">Não</option>
                         <option value="Sim">Sim</option>
                     </select>
@@ -144,6 +240,7 @@
                 <div class="form-group">
                     <label for="coleta_amostra">Coleta de amostra para exame diagnóstico</label>
                     <select id="coleta_amostra">
+                        <option value="">Selecione...</option>
                         <option value="Não, solicito coleta pela Zoonoses">Não, solicito coleta pela Zoonoses</option>
                         <option value="Sim, por laboratório particular">Sim, por laboratório particular</option>
                     </select>
@@ -152,6 +249,7 @@
                 <div class="form-group">
                     <label for="tratamento_iniciado">Tratamento específico já foi iniciado?</label>
                     <select id="tratamento_iniciado">
+                        <option value="">Selecione...</option>
                         <option value="Sim">Sim</option>
                         <option value="Não">Não</option>
                     </select>
@@ -199,7 +297,7 @@
 
     </main>
 
-<!-- 1º: Importar a biblioteca oficial do Supabase -->
+    <!-- 1º: Importar a biblioteca oficial do Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- 2º: Importar o arquivo central com as credenciais -->
@@ -209,8 +307,6 @@
     <script src="../js/app.js"></script>
 
     <script>
-        // A partir daqui, 'supabaseClient' já está pronto e global graças ao supabase.js
-
         let vetData = null;
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -245,135 +341,82 @@
             }
         };
 
-        // --- LÓGICA DINÂMICA DE LESÕES ---
-        const checkboxesLocais = document.querySelectorAll('input[name="locais"]');
-        const selectDistribuicao = document.getElementById('distribuicao_lesoes');
-        const avisoOutros = document.getElementById('aviso-outros');
-        
-        checkboxesLocais.forEach(cb => {
-            cb.addEventListener('change', () => {
-                // Conta quantas caixinhas estão marcadas
-                const checkedCount = document.querySelectorAll('input[name="locais"]:checked').length;
-                
-                // Verifica se a caixinha "Outros" específica está marcada
-                const isOutrosChecked = document.querySelector('input[name="locais"][value="Outros"]').checked;
-                
-                // Mostra ou esconde a mensagem de aviso logo abaixo das caixinhas
-                avisoOutros.style.display = isOutrosChecked ? 'block' : 'none';
-        
-                // Altera o select principal baseado na quantidade
-                if (checkedCount === 0) {
-                    selectDistribuicao.value = "Sem lesão aparente";
-                } else if (checkedCount === 1) {
-                    selectDistribuicao.value = "Única";
-                } else if (checkedCount >= 2 && checkedCount <= 5) {
-                    selectDistribuicao.value = "Múltipla (até 5)";
-                } else if (checkedCount === 6) {
-                    selectDistribuicao.value = "Disseminada (acima de 5)";
-                }
-            });
-        });
-
-        // ENVIO DO FORMULÁRIO
+        // ENVIO DO FORMULÁRIO UTILIZANDO A FUNÇÃO RPC DEFINITIVA E ACIONANDO O MODAL
         document.getElementById('esporo-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // VALIDAÇÃO OBRIGATÓRIA DE "OUTROS" ANTES DE ENVIAR
-            const isOutrosChecked = document.querySelector('input[name="locais"][value="Outros"]')?.checked;
-            const observacoesText = document.getElementById('observacoes').value.trim();
-        
-            if (isOutrosChecked && observacoesText === "") {
-                alert('Você selecionou "Outros" em Locais predominantes das Lesões, por favor detalhe Outros no campo "Observações Adicionais" antes de enviar a notificação.');
-                document.getElementById('observacoes').focus(); // Leva o cursor do usuário direto para o campo
-                return; // Interrompe o processo de envio aqui mesmo
-            }
-        
             const btnSubmit = document.getElementById('btn-submit');
             btnSubmit.disabled = true;
             btnSubmit.innerText = 'Enviando Notificação... Aguarde';
 
             try {
-                // 1. Número da Notificação
-                let numNotificacao = 'ESP-' + Date.now();
-                try {
-                    const { data: rpcNum, error: rpcErr } = await supabaseClient.rpc('gerar_numero_notificacao', { p_agravo: 'esporotricose' });
-                    if (!rpcErr && rpcNum) numNotificacao = rpcNum;
-                } catch (e) {
-                    console.warn("RPC não encontrada ou falhou, usando número local:", numNotificacao);
-                }
+                // Funções auxiliares de captura
+                const getVal = (id) => document.getElementById(id) ? document.getElementById(id).value : '';
+                const getChecked = (name) => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
 
-                // 2. Tabela Principal
-                const dadosNotificacaoGeral = {
-                    numero_notificacao: numNotificacao,
-                    agravo: 'esporotricose',
-                    vet_nome: vetData?.nome || 'Não informado',
-                    vet_crmv: vetData?.crmv || 'Não informado',
-                    vet_clinica: vetData?.clinica || 'Não informada',
-                    vet_endereco: vetData?.endereco || 'Não informado',
-                    vet_telefone: vetData?.telefone || 'Não informado',
-                    vet_email: vetData?.email || 'Não informado',
-                    tutor_nome: document.getElementById('tutor_nome').value || '',
-                    tutor_cpf: document.getElementById('tutor_cpf').value || '',
-                    tutor_endereco: document.getElementById('tutor_endereco').value || '',
-                    tutor_numero: document.getElementById('tutor_numero').value || '',
-                    tutor_complemento: document.getElementById('tutor_complemento').value || '',
-                    tutor_bairro: document.getElementById('tutor_bairro').value || '',
-                    tutor_telefone: document.getElementById('tutor_telefone').value || '',
-                    animal_nome: document.getElementById('animal_nome').value || '',
-                    animal_especie: document.getElementById('animal_especie').value || '',
-                    animal_raca: document.getElementById('animal_raca').value || '',
-                    animal_idade: document.getElementById('animal_idade').value || '',
-                    animal_sexo: document.getElementById('animal_sexo').value || ''
-                };
+                // Montagem do Payload completo (unindo todas as novas colunas estruturais)
+                const payload = {
+                    vet_nome: vetData?.nome || '',
+                    vet_crmv: vetData?.crmv || '',
+                    vet_clinica: vetData?.clinica || '',
+                    vet_endereco: vetData?.endereco || '',
+                    vet_telefone: vetData?.telefone || '',
+                    vet_email: vetData?.email || '',
 
-                const { data: notifSalva, error: errNotif } = await supabaseClient
-                    .from('notificacoes')
-                    .insert([dadosNotificacaoGeral])
-                    .select()
-                    .single();
+                    tutor_nome: getVal('tutor_nome'),
+                    tutor_cpf: getVal('tutor_cpf'),
+                    tutor_telefone: getVal('tutor_telefone'),
+                    tutor_endereco: getVal('tutor_endereco'),
+                    tutor_numero: getVal('tutor_numero'),
+                    tutor_complemento: getVal('tutor_complemento'),
+                    tutor_bairro: getVal('tutor_bairro'),
+                    tutor_municipio: 'Sorocaba',
 
-                if (errNotif) throw new Error("Falha ao salvar Notificação Geral (Tabela 'notificacoes'): " + errNotif.message);
-                if (!notifSalva || !notifSalva.id) throw new Error("A notificação foi inserida, mas o ID gerado não foi retornado (RLS).");
+                    animal_nome: getVal('animal_nome'),
+                    animal_especie: getVal('animal_especie'),
+                    animal_raca: getVal('animal_raca'),
+                    animal_sexo: getVal('animal_sexo'),
+                    animal_idade: getVal('animal_idade'),
+                    animal_peso: getVal('animal_peso'),
+                    animal_tamanho_pelo: getVal('animal_tamanho_pelo'),
+                    animal_cor_pelagem: getVal('animal_cor_pelagem'),
+                    animal_castrado: getVal('animal_castrado'),
+                    animal_comportamento: getVal('animal_comportamento'),
+                    animal_condicao_fisica: getVal('animal_condicao_fisica'),
 
-                // 3. Captura dos Checkboxes
-                const locaisArray = Array.from(document.querySelectorAll('input[name="locais"]:checked'))
-                    .map(checkbox => checkbox.value);
-                const locaisSelecionadosStr = locaisArray.length > 0 ? locaisArray.join(', ') : 'Nenhum selecionado';
-
-                // 4. Tabela específica 'esporotricose'
-                const dadosEspecificosEsporo = {
-                    notificacao_id: notifSalva.id,
-                    distribuicao_lesoes: document.getElementById('distribuicao_lesoes').value || '',
-                    locais_lesoes: locaisSelecionadosStr,
-                    humanos_com_lesoes: document.getElementById('humanos_com_lesoes').value || '',
-                    outros_animais_com_lesoes: document.getElementById('outros_animais_com_lesoes').value || '',
-                    coleta_amostra: document.getElementById('coleta_amostra').value || '',
-                    tratamento_iniciado: document.getElementById('tratamento_iniciado').value || '',
-                    tratamento_detalhes: document.getElementById('tratamento_detalhes').value || '',
-                    observacoes: document.getElementById('observacoes').value || ''
-                };
-
-                let resEsporo = await supabaseClient.from('notificacao_esporotricose').insert([dadosEspecificosEsporo]);
-                
-                if (resEsporo.error) {
-                    resEsporo = await supabaseClient.from('esporotricose').insert([dadosEspecificosEsporo]);
+                    ambiente_moradia: getVal('ambiente_moradia'),
+                    classificacao_habitacao: getVal('classificacao_habitacao'),
+                    data_inicio_sinais: getVal('data_inicio_sinais') || null, 
+                    lesao_pele: getVal('lesao_pele'),
                     
-                    if (resEsporo.error) {
-                        // 👇 GARANTIA DE CONSISTÊNCIA 👇
-                        await supabaseClient
-                            .from('notificacoes')
-                            .delete()
-                            .eq('id', notifSalva.id);
-                        
-                        throw new Error("Falha ao salvar dados Clínicos (Tabela Específica): " + resEsporo.error.message + ". A notificação principal foi desfeita para evitar registros incompletos.");
-                    }
+                    distribuicao_lesoes: getVal('distribuicao_lesoes'),
+                    humanos_com_lesoes: getVal('humanos_com_lesoes'),
+                    outros_animais_com_lesoes: getVal('outros_animais_com_lesoes'),
+                    coleta_amostra: getVal('coleta_amostra'),
+                    tratamento_iniciado: getVal('tratamento_iniciado'),
+                    tratamento_detalhes: getVal('tratamento_detalhes'),
+                    observacoes: getVal('observacoes'),
+
+                    sinais_clinicos: getChecked('sinais_clinicos'),
+                    locais_lesoes: getChecked('locais_lesoes') 
+                };
+
+                // Chamada RPC ao banco de dados com tratamento de erro
+                const { data, error } = await window.supabaseClient.rpc('salvar_notificacao_esporotricose_acid', { payload: payload });
+
+                if (error) {
+                    throw new Error(error.message);
                 }
 
-                // Exibe o Modal de Sucesso
-                document.getElementById('modal-msg-sucesso').innerHTML = `A Notificação <strong>${numNotificacao}</strong> foi registrada no sistema.`;
-                document.getElementById('modal-step-1').style.display = 'block';
-                document.getElementById('modal-step-2').style.display = 'none';
-                document.getElementById('modal-sucesso').style.display = 'flex';
+                if (data && data.sucesso === true) {
+                    // Prepara e Exibe o Modal Customizado que já estava na interface
+                    document.getElementById('modal-msg-sucesso').innerHTML = `A Notificação <strong>${data.numero_notificacao}</strong> foi registrada no sistema.`;
+                    document.getElementById('modal-step-1').style.display = 'block';
+                    document.getElementById('modal-step-2').style.display = 'none';
+                    document.getElementById('modal-sucesso').style.display = 'flex';
+                } else {
+                    alert(`Atenção: ${data?.erro || 'Erro desconhecido ao salvar.'}`);
+                }
 
             } catch (error) {
                 console.error("Erro completo no processo:", error);
