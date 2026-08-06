@@ -44,6 +44,10 @@
                     <input type="text" id="tutor_cpf" placeholder="000.000.000-00" inputmode="numeric" maxlength="14">
                 </div>
                 <div class="form-group">
+                    <label for="tutor_telefone">Telefone de Contato</label>
+                    <input type="tel" id="tutor_telefone" placeholder="Ex: (15) 99876-5432" inputmode="numeric" maxlength="15">
+                </div>
+                <div class="form-group">
                     <label for="tutor_endereco">Endereço de residência do animal (logradouro) *</label>
                     <input type="text" id="tutor_endereco" required>
                 </div>
@@ -60,8 +64,8 @@
                     <input type="text" id="tutor_bairro" required>
                 </div>
                 <div class="form-group">
-                    <label for="tutor_telefone">Telefone de Contato</label>
-                    <input type="tel" id="tutor_telefone" placeholder="Ex: (15) 99876-5432" inputmode="numeric" maxlength="15">
+                    <label for="tutor_municipio">Município *</label>
+                    <input type="text" id="tutor_municipio" required>
                 </div>
             </div>
 
@@ -370,7 +374,7 @@
                     tutor_numero: getVal('tutor_numero'),
                     tutor_complemento: getVal('tutor_complemento'),
                     tutor_bairro: getVal('tutor_bairro'),
-                    tutor_municipio: 'Sorocaba',
+                    tutor_municipio: getVal('tutor_municipio'),
 
                     animal_nome: getVal('animal_nome'),
                     animal_especie: getVal('animal_especie'),
