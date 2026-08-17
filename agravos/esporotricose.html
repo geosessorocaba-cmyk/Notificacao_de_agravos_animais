@@ -40,20 +40,20 @@
                     <input type="text" id="tutor_nome" required placeholder="Nome completo do responsável">
                 </div>
                 <div class="form-group">
-                    <label for="tutor_cpf">CPF do Tutor</label>
-                    <input type="text" id="tutor_cpf" placeholder="000.000.000-00" inputmode="numeric" maxlength="14">
+                    <label for="tutor_cpf">CPF do Tutor *</label>
+                    <input type="text" id="tutor_cpf" required placeholder="000.000.000-00" inputmode="numeric" maxlength="14">
                 </div>
                 <div class="form-group">
-                    <label for="tutor_telefone">Telefone de Contato</label>
-                    <input type="tel" id="tutor_telefone" placeholder="Ex: (15) 99876-5432" inputmode="numeric" maxlength="15">
+                    <label for="tutor_telefone">Telefone do Tutor *</label>
+                    <input type="tel" id="tutor_telefone" required placeholder="Ex: (15) 99876-5432" inputmode="numeric" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="tutor_endereco">Endereço de residência do animal (logradouro) *</label>
                     <input type="text" id="tutor_endereco" required>
                 </div>
                 <div class="form-group">
-                    <label for="tutor_numero">Número</label>
-                    <input type="text" id="tutor_numero" inputmode="numeric" maxlength="6">
+                    <label for="tutor_numero">Número do imóvel *</label>
+                    <input type="text" id="tutor_numero" required inputmode="numeric" maxlength="6">
                 </div>
                 <div class="form-group">
                     <label for="tutor_complemento">Complemento</label>
@@ -73,76 +73,83 @@
             <div class="card">
                 <h2>🐾 Dados do Animal</h2>
                 <div class="form-group">
-                    <label for="animal_nome">Nome do Animal *</label>
+                    <label for="animal_nome">Nome do Animal suspeito/confirmado *</label>
                     <input type="text" id="animal_nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="animal_idade">Idade</label>
+                    <input type="text" id="animal_idade" required placeholder="Ex: 2 anos, 6 meses...">
                 </div>
                 <div class="form-group">
                     <label for="animal_especie">Espécie *</label>
                     <select id="animal_especie" required>
-                        <option value="FELINA">Felina</option>
-                        <option value="CANINA">Canina</option>
-                        <option value="OUTRO">Outro</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="animal_raca">Raça</label>
-                    <input type="text" id="animal_raca" placeholder="Ex: SRD, Siamês...">
-                </div>
-                <div class="form-group">
-                    <label for="animal_idade">Idade</label>
-                    <input type="text" id="animal_idade" placeholder="Ex: 2 anos, 6 meses...">
-                </div>
-                <div class="form-group">
-                    <label for="animal_peso">Peso (kg)</label>
-                    <input type="text" id="animal_peso" placeholder="Ex: 4.5">
-                </div>
-                <div class="form-group">
-                    <label for="animal_sexo">Sexo</label>
-                    <select id="animal_sexo">
                         <option value="">Selecione...</option>
-                        <option value="MACHO">Macho</option>
-                        <option value="FÊMEA">Fêmea</option>
+                        <option value="Felina">Felina</option>
+                        <option value="Canina">Canina</option>
+                        <option value="Outro:">Outro:</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="animal_castrado">O animal é castrado?</label>
-                    <select id="animal_castrado">
-                        <option value="">Selecione...</option>
-                        <option value="Sim">Sim</option>
-                        <option value="Não">Não</option>
-                        <option value="Não sei">Não sei</option>
-                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="animal_tamanho_pelo">Tamanho da Pelagem</label>
+                    <label for="animal_peso">Peso aproximado (kg) *</label>
+                    <input type="text" id="animal_peso" required placeholder="Ex: 4.5 Kg">
+                </div>
+                <div class="form-group">
+                    <label for="animal_raca">Raça *</label>
+                    <input type="text" id="animal_raca" required placeholder="Ex: SRD, Siamês...">
+                </div>
+                <div class="form-group">
+                    <label for="animal_tamanho_pelo">Tamanho da Pelagem *</label>
                     <select id="animal_tamanho_pelo">
                         <option value="">Selecione...</option>
                         <option value="Curto">Curto</option>
                         <option value="Médio">Médio</option>
                         <option value="Longo">Longo</option>
+                        <option value="Outro:">Outro:</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="animal_cor_pelagem">Cor da Pelagem</label>
                     <input type="text" id="animal_cor_pelagem" placeholder="Ex: Tigrado, Preto, Branco...">
+                </div>        
+                <div class="form-group">
+                    <label for="animal_sexo">Sexo *</label>
+                    <select id="animal_sexo">
+                        <option value="">Selecione...</option>
+                        <option value="Fêmea">Fêmea</option>
+                        <option value="Macho">Macho</option>
+                        <option value="Não sei informar">Não sei informar</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label for="animal_condicao_fisica">Condição Física</label>
+                    <label for="animal_castrado">O animal é castrado? *</label>
+                    <select id="animal_castrado">
+                        <option value="">Selecione...</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                        <option value="NNão sei informar">Não sei informar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="animal_comportamento">Comportamento *</label>
+                    <select id="animal_comportamento">
+                        <option value="">Selecione...</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Arisco">Arisco</option>
+                        <option value="Agressivo">Agressivo</option>
+                        <option value="Apático/prostrado">Apático/prostrado</option>
+                        <option value="Doente">Doente</option>
+                        <option value="Outro:">Outro:</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="animal_condicao_fisica">Condição Física *</label>
                     <select id="animal_condicao_fisica">
                         <option value="">Selecione...</option>
                         <option value="Normal">Normal</option>
                         <option value="Magro">Magro</option>
-                        <option value="Caquético">Caquético</option>
-                        <option value="Obeso">Obeso</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="animal_comportamento">Comportamento</label>
-                    <select id="animal_comportamento">
-                        <option value="">Selecione...</option>
-                        <option value="Dócil">Dócil</option>
-                        <option value="Assustado">Assustado</option>
-                        <option value="Agressivo">Agressivo</option>
+                        <option value="Gordo">Gordo</option>
+                        <option value="Outro:">Outro:</option>
                     </select>
                 </div>
             </div>
@@ -151,22 +158,25 @@
             <div class="card">
                 <h2>🏡 Ambiente e Moradia</h2>
                 <div class="form-group">
-                    <label for="ambiente_moradia">Tipo de Moradia</label>
+                    <label for="ambiente_moradia">Tipo de Moradia *</label>
                     <select id="ambiente_moradia">
                         <option value="">Selecione...</option>
                         <option value="Casa">Casa</option>
                         <option value="Apartamento">Apartamento</option>
+                        <option value="Empresa/Comércio">Empresa/Comércio</option>
                         <option value="Sítio/Chácara">Sítio/Chácara</option>
-                        <option value="Empresa">Empresa</option>
+                        <option value="Outro:">Outro:</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="classificacao_habitacao">Classificação do Acesso</label>
+                    <label for="classificacao_habitacao">Classificação do Acesso/habitação *</label>
                     <select id="classificacao_habitacao">
                         <option value="">Selecione...</option>
                         <option value="Totalmente domiciliado (sem acesso à rua)">Totalmente domiciliado (sem acesso à rua)</option>
                         <option value="Semi-domiciliado (com acesso à rua)">Semi-domiciliado (com acesso à rua)</option>
                         <option value="Animal de rua (comunitário)">Animal de rua (comunitário)</option>
+                        <option value="Colônia">Colônia</option>
+                        <option value="Errante">Errante</option>
                     </select>
                 </div>
             </div>
@@ -174,14 +184,25 @@
             <!-- DADOS CLÍNICOS -->
             <div class="card">
                 <h2>🩺 Dados Clínicos e Epidemiológicos</h2>
-                
+
                 <div class="form-group">
-                    <label for="data_inicio_sinais">Data de Início dos Sinais Clínicos</label>
+                    <label>Sinais Clínicos Apresentados *</label>
+                    <div class="checkbox-grid">
+                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Aumento da região nasal"> Aumento da região nasal</label>
+                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Espirros"> Espirros</label>
+                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Dispneia"> Dispneia</label>
+                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Secreção nasal"> Secreção nasal</label>
+                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Nenhum dos anteriores"> Nenhum dos anteriores</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="data_inicio_sinais">Data de Início dos Sinais Clínicos *</label>
                     <input type="date" id="data_inicio_sinais">
                 </div>
 
                 <div class="form-group">
-                    <label for="lesao_pele">Apresenta Lesão de Pele?</label>
+                    <label for="lesao_pele">Apresenta Lesão de Pele? *</label>
                     <select id="lesao_pele">
                         <option value="">Selecione...</option>
                         <option value="Sim">Sim</option>
@@ -190,13 +211,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="distribuicao_lesoes">Distribuição das Lesões</label>
+                    <label for="distribuicao_lesoes">Distribuição das Lesões *</label>
                     <select id="distribuicao_lesoes">
                         <option value="">Selecione...</option>
                         <option value="Única">Única</option>
                         <option value="Múltipla (até 5)">Múltipla (até 5)</option>
                         <option value="Disseminada (acima de 5)">Disseminada (acima de 5)</option>
                         <option value="Sem lesão aparente">Sem lesão aparente</option>
+                        <option value="Lesões não sugestivas de esporotricose">Lesões não sugestivas de esporotricose</option>
                     </select>
                 </div>
 
@@ -208,22 +230,14 @@
                         <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Membros anteriores"> Membros ant.</label>
                         <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Membros posteriores"> Membros post.</label>
                         <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Cauda"> Cauda</label>
+                        <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Boca"> Boca</label>
+                        <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Nariz"> Nariz</label>
+                        <label class="checkbox-item"><input type="checkbox" name="locais_lesoes" value="Olho"> Olho</label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Outros Sinais Clínicos Apresentados</label>
-                    <div class="checkbox-grid">
-                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Espirros"> Espirros</label>
-                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Secreção Nasal"> Secreção Nasal</label>
-                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Apatia"> Apatia</label>
-                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Anorexia/Emagrecimento"> Anorexia/Emagrecimento</label>
-                        <label class="checkbox-item"><input type="checkbox" name="sinais_clinicos" value="Linfadenomegalia"> Linfadenomegalia</label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="humanos_com_lesoes">Há pessoas na residência com lesões de pele?</label>
+                    <label for="humanos_com_lesoes">Há pessoas na residência com lesões de pele? *</label>
                     <select id="humanos_com_lesoes">
                         <option value="">Selecione...</option>
                         <option value="Não">Não</option>
@@ -233,7 +247,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="outros_animais_com_lesoes">Outros animais na residência com lesões?</label>
+                    <label for="outros_animais_com_lesoes">Existem outros animais na residência com lesões? *</label>
                     <select id="outros_animais_com_lesoes">
                         <option value="">Selecione...</option>
                         <option value="Não">Não</option>
@@ -242,11 +256,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="coleta_amostra">Coleta de amostra para exame diagnóstico</label>
+                    <label for="coleta_amostra">Foi realizada coleta de amostra para exame diagnóstico? *</label>
                     <select id="coleta_amostra">
                         <option value="">Selecione...</option>
                         <option value="Não, solicito coleta pela Zoonoses">Não, solicito coleta pela Zoonoses</option>
-                        <option value="Sim, por laboratório particular">Sim, por laboratório particular</option>
+                        <option value="Sim, por meio de laboratório particular (faça o upload do arquivo abaixo)">Sim, por meio de laboratório particular (faça o upload do arquivo abaixo)r</option>
                     </select>
                 </div>
 
@@ -377,32 +391,33 @@
                     tutor_municipio: getVal('tutor_municipio'),
 
                     animal_nome: getVal('animal_nome'),
-                    animal_especie: getVal('animal_especie'),
-                    animal_raca: getVal('animal_raca'),
-                    animal_sexo: getVal('animal_sexo'),
                     animal_idade: getVal('animal_idade'),
+                    animal_especie: getVal('animal_especie'),
                     animal_peso: getVal('animal_peso'),
+                    animal_raca: getVal('animal_raca'),
                     animal_tamanho_pelo: getVal('animal_tamanho_pelo'),
                     animal_cor_pelagem: getVal('animal_cor_pelagem'),
+                    animal_sexo: getVal('animal_sexo'),
                     animal_castrado: getVal('animal_castrado'),
                     animal_comportamento: getVal('animal_comportamento'),
                     animal_condicao_fisica: getVal('animal_condicao_fisica'),
 
                     ambiente_moradia: getVal('ambiente_moradia'),
                     classificacao_habitacao: getVal('classificacao_habitacao'),
+                    sinais_clinicos: getChecked('sinais_clinicos'),
                     data_inicio_sinais: getVal('data_inicio_sinais') || null, 
                     lesao_pele: getVal('lesao_pele'),
                     
                     distribuicao_lesoes: getVal('distribuicao_lesoes'),
+                    locais_lesoes: getChecked('locais_lesoes'),
                     humanos_com_lesoes: getVal('humanos_com_lesoes'),
                     outros_animais_com_lesoes: getVal('outros_animais_com_lesoes'),
                     coleta_amostra: getVal('coleta_amostra'),
+                    
                     tratamento_iniciado: getVal('tratamento_iniciado'),
                     tratamento_detalhes: getVal('tratamento_detalhes'),
                     observacoes: getVal('observacoes'),
 
-                    sinais_clinicos: getChecked('sinais_clinicos'),
-                    locais_lesoes: getChecked('locais_lesoes') 
                 };
 
                 // Chamada RPC ao banco de dados com tratamento de erro
