@@ -121,7 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- INTEGRAÇÃO: ENVIO PARA O SUPABASE AO SUBMETER O FORMULÁRIO ---
+    // ==========================================================================
+    // 3. INTEGRAÇÃO: ENVIO PARA O SUPABASE AO SUBMETER O FORMULÁRIO
+    // ==========================================================================
     const formEsporotricose = document.getElementById('form-esporotricose');
 
     if (formEsporotricose) {
@@ -151,6 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const locaisLesoesChecked = Array.from(document.querySelectorAll('input[name="locais_lesoes"]:checked')).map(cb => cb.value);
                 const sinaisClinicosChecked = Array.from(document.querySelectorAll('input[name="sinais_clinicos"]:checked')).map(cb => cb.value);
 
+                // Tratamento correto do Município (Verifica se é Sorocaba ou Outro)
+                const opcaoMunicipio = getVal('tutor_municipio_opcao');
+                const municipioFinal = opcaoMunicipio === 'Outro' ? getVal('tutor_municipio_outro') : 'Sorocaba';
+
                 // Recupera os dados do veterinário salvos
                 const vetDados = JSON.parse(localStorage.getItem('vetNotificante')) || {};
 
@@ -170,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     tutor_numero: getVal('tutor_numero'),
                     tutor_complemento: getVal('tutor_complemento'),
                     tutor_bairro: getVal('tutor_bairro'),
-                    tutor_municipio: getVal('tutor_municipio') || 'Sorocaba',
+                    tutor_municipio: municipioFinal, // Variável corrigida aqui
 
                     animal_nome: getVal('animal_nome'),
                     animal_especie: getVal('animal_especie'),
@@ -231,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================================================
-// 3. FUNÇÕES AUXILIARES E GLOBAIS
+// FUNÇÕES AUXILIARES E GLOBAIS
 // ==========================================================================
 
 function preencherCamposVet(vet) {
