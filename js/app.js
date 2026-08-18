@@ -63,6 +63,23 @@ function aplicarMascaras() {
 document.addEventListener('DOMContentLoaded', () => {
     
     aplicarMascaras(); 
+
+    // LÓGICA PARA MOSTRAR/OCULTAR O CAMPO "OUTRO" NO MUNICÍPIO
+    document.querySelectorAll('input[name="tutor_municipio_opcao"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const inputOutro = document.getElementById('tutor_municipio_outro');
+            if (inputOutro) {
+                if (e.target.value === 'Outro') {
+                    inputOutro.style.display = 'block';
+                    inputOutro.setAttribute('required', 'true');
+                } else {
+                    inputOutro.style.display = 'none';
+                    inputOutro.removeAttribute('required');
+                    inputOutro.value = '';
+                }
+            }
+        });
+    });
     
     // Restaura o tema salvo
     const savedTheme = localStorage.getItem('theme');
