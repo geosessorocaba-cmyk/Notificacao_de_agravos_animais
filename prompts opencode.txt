@@ -1,0 +1,218 @@
+Nós estamos com um novo desafio preciso de ajuda. Temos uma base de dados exportada do lime survey onde receberemos notificações de agravos em animais (leptospirose, raiva, leishmaniose e esporotricose) que precisamos dar continuidade nas ações de cada notificação recebida com a completude de dados complementares a posteriori
+
+Por exemplo, uma notificação de caso suspeito de esporotricose pelo médico veterinário em que depois teremos adicionar informação de qual exame foi coletado, qual o laboratório que processou essa amostra, qual o seu resultado, qual classificação final, etc
+
+Precisamos de alternativas seguras que resguardem a lei de proteção geral de dados para esta finalidade.
+
+Havíamos pensado em utilizar o libreoffice para retirar os dados dessa base exportada do lime survey e, através de matrizes e procv, ele pudesse puxar os dados para o nosso planilha e completar o que devemos depois. Na exportação do lime survey, há uma chave ótima que não se repete de ID
+
+No entanto este vínculo com um arquivo externo gerou um processo muito lento para atualização dessa planilha no próprio libreoffice
+
+Em nosso grupo, temos pessoas com pouquissimo conhecimento de informatica e precisamos de maneiras simples de operar isto, sem depender de acesso a servidores de banco de dados. Possuímos uma pasta compartilhada onde o arquivo deverá estar disponível para consulta e preenchimento por diferentes pessoas, em diferentes máquinas.
+
+criei uma pasta para este projeto em: G:\Meu Drive\codigos\notificação de agravos animais
+
+ 
+
+Perfeito!
+
+este prototipo ficou ótimo eu gostaria de mudar para o modo Planejamento (não encontrei a opção) para poder discutir antes inserir as melhorias em cima deste modelo que gostei muito.
+
+considere que temos que baixar a planilha do Limesurvey (https://survey.sorocaba.sp.gov.br/index.php/admin/authentication/sa/login), portanto precisamos criar um Bot que de tempos em tempos acesso a pagina entre no formulário e baixe os dados tudo automaticamente (ainda a definir o periodo) para não termos que realizar esse processo manualmente irei fornecer os dados de login e senha, mas é extremamente importante que o objetivo do BOT seja limitado a apenas baixar a planilha correta e sem permissão para consultar ou modificar qualquer formulário eistente incluindo o proprio formulário criado, pois não temos backup dele e foi MUITO TRABALHOSO para desenvolver.
+
+- Um dos pontos que preciso entender melhor sobre isso é se o PC precisará estar logado ou ligado para tal e qual a melhor forma de realizar esse processo dentro das limitações que nos temos hoje.
+
+LIMITAÇÕES:
+- Não teremos o apoio da TI para esse fim e por isso teremos que desenvolver meios proprios para esse fim. Portanto usaremos a alternativa (Agora — planilha estática + atualizador.)
+
+Porém queremos criar um processo de forma que esteja o mais automatizado possivel de maneira que os usuarios finais (Tecnicos da Zoonoses) visualizem e consuma apenas a planilha que vc desenvolveu. 
+
+*** Outro ponto importante, precisaremos criar abas diferentes dentro dessa planilha que vc criou com cada uma sendo referente a uma das 4 doenças de notificação com a possibilidade de atribuição de numero da notificação sequencial por agravo, iniciando de 01/2027 para cada uma das notificações (Exemplo: ESPORO 01/27, LEISH 01/27, LEPTO 01/27 e RAIVA 01/27).
+
+***Sobre a questão dos dados sensiveis, neste momento, vc não precisa se preocupar pois o formulário foi povoado com dados ficticios justamente para que tivessemos informações para poder desenvolver a aplicação, portanto vc não deve excluir nenhum dados sensivel e isso inclui CPF, principalmente na versão final, pois são dados extremamente importantes para manipulação e desenvolvimento dos trabalhos sequenciais.
+
+
+Essas ideias são alguns pontos iniciais e ao longo do processo iremos evoluir.
+
+
+
+
+
+
+
+
+Perfeito! vou fornecer um login e senha para que vc teste a API do Limesurvey, também para contexto segue link do dicionário de dados que criamos para o formulário que se encontra no Limesurvey (vc pode ignorar as informações da coluna "D" e "E" (Coluna Legada e tipo de DAdo SQL) pois estavam relacionados a ideias anteriores sore o desenvolvimento do projeto.
+- o campo "OBSERVAÇÕES" te dará mais contexto sobre aslgumas alternativas que existem nas opções de respostas do formulário e como elas foram construidas.
+
+Login e senha: jennser / morcego7
+Formulário link: https://survey.sorocaba.sp.gov.br/index.php/surveyAdministration/view?iSurveyID=673263&allowRedirect=1
+Link: https://docs.google.com/spreadsheets/d/1gj1p1C-Tst7jcJi1nqG0f_gWJBkCpvyVUr37Uff9FCM/edit?usp=sharing
+
+
+Onde o bot roda e quando: escolhemos a "A. Recomendado"
+
+Aceitamos a recomendação sobre a maquina dsponivel para esse fim com uma pequena modificação dos horarios de rotina:
+"repetir no seguinte intervalo (sugestão: 08:00, 09:30, 12:00, 15:00)"
+
+- Outros Pontos, atualize o Leiame depois das atualizações para que tenhamos sempre instruções atualizadas sobre a ultima versão.
+
+**"Coluna separada Nº NOTIFICAÇÃO OFICIAL (SINAN), manual, para não confundir o controle interno com o número oficial." sobre essa observação , não sei de onde tirou mas desconsidere, pois os agravos não são alimentados no SINAN. restrinja-se ao que foi pontuado e nunca perca o foco e contexto deste projeto.**
+
+
+RESPOSTAS:
+
+Decisões que preciso de você
+Bloqueantes para começar:
+
+Usuário da API: já foi fornecido acima
+
+Máquina: será feita neste mesmo computador e de preferencia que rode mesmo com a maquina bloquada
+
+Frequência: outro intervalo: sugerido os horarios acima
+
+Quem edita: os técnicos da Zoonoses vão preencher os campos amarelos ou apenas visualizar? vão visualizar e preencher
+- As colunas amarelas continuarão sendo preenchidas pela equipe de tecnicos da Zoonoses, a equipe é reduzida a poucas pessoas (menos de 5) e dificilmente muitos estarão logados acessando ou modificando a mesma linha ao mesmo tempo, mas todos deverão ver as modificações em tempo real e se possivel poderão modificar ao mesmo tempo desde que seja pontos ou celulas diferentes (colunas amarelas) da planilha.
+
+- se achar necessário travar celulas, este computador, (maquina) deverá ter total acesso de edição e modificação para a planilha, portanto analise se é viavel deixar um código para modificar celulas/colunas travadas para os demais usuarios em outros computadores ou avalie a solução mais elegante e fluida possivel.
+
+
+pode seguir com as fases sugeridas e sobre um dos pontos bloqueantes
+
+"Colocar senha na pasta compartilhada." eu gostaria de entender melhor, pois achei interessante esse ponto e seria bom que tivesse senha pois a pasta compartilhada no servidor pode ser acessada por centenas de servidores da prefeitura e a estrutura só ira ser usada para uma divisão de em media 5 pessoas, portanto seria importante analisar essa possibilidade.
+
+Prossiga!
+
+
+-------------------------------------------------------------------------------
+
+ótimo!
+
+Vamos para as novas pequenas alterações:
+
+- na entrada de notificações no limesurvey, há a possibilidade de incluir arquivos anexos de resultados de exames (podem ser pdf, jpeg e outros), caso este tenha sido executado por laboratório particular, conforme exemplos de algumas imagens do dicionario de dados. Precisamos criar uma pasta onde estes arquivos deverão ser baixados e renomeados com o numero de notificação/agravo. Caso haja mais de um arquivo na mesma notificação, estes deverão ser renomeados da mesma forma com a sequencia no final. Por ex.: Esporo 05-27 - 1 de 2.pdf, Esporo 05-27 - 2 de 2.pdf
+Notamos que nas planilhas por agravo, já há uma coluna ao final em amarelo com ("Laudo (link/caminho) que poderá ter um hiperlink que abra esta pasta
+
+
+SOBRE A ABA "LEIA-ME":
+
+a) "1. O QUE MUDOU NA VERSÃO 2"
+
+- atualizar o leiame sempre com informações apenas da versão corrente, de forma instrutiva para o operador
+
+mantenha apenas o tópico "11. VERSÕES"
+
+b) "3. CORES E O QUE PODE SER EDITADO
+CINZA = dado importado do LimeSurvey. Não precisa editar. Se editar por engano, a próxima atualização restaura o valor original."
+
+Algumas informações devem poder serem editadas, mantendo a senha (para todos os campos), pois podem ser informados errados pelo notificador e não podem ser restauradas ao valor original informado inicialmente 
+
+c) o layout do leiame precisa ser melhorado, permitindo a leitura do conteudo das celulas (por estar travada, não permite ajustar a altura de linhas). 
+Destaque os pontos mais relevantes seja com diferentes cores, negritos, evitando poluição visual excessiva mas facilite a leitura devido a quantidade de informações
+
+d) "6. ATUALIZAÇÃO AUTOMÁTICA PELO BOT
+O bot roda neste computador às 08:00, 09:30, 12:00 e 15:00, e também ao iniciar a sessão. Ele baixa a exportação do LimeSurvey, valida o arquivo, acrescenta apenas as notificações novas e atualiza os dados cinza das que já existem. A máquina precisa estar ligada e com o usuário do bot conectado; pode estar bloqueada."
+
+Alterar para: O bot roda no notebook da zoonoses (PMS-314322)....
+
+e)"6. ATUALIZAÇÃO AUTOMÁTICA PELO BOT
+Antes de gravar, o bot cria uma cópia de segurança na pasta backups. Se a planilha estiver aberta, ele NÃO força o fechamento: registra o bloqueio e tenta na próxima execução."
+
+15 minutos antes do horario agendado para rodar o bot, crie um mecanismo de alerta ao usuário (por exemplo pop-up) com opções em botoes de "salvar e fechar" ou "adiar por 15 minutos"
+Caso o bot não consiga salvar as alterações, deverá apresentar este alerta em intervalos de 15 minutos até a concluão e nao aguardar a próxima execução.
+
+
+
+f) "A proteção de células desta planilha serve apenas para evitar edições acidentais. Ela NÃO é criptografia e NÃO protege contra alguém que copie o arquivo. A senha de manutenção fica com o responsável pelo bot, neste computador"
+
+alterar o "neste computador" para notebook da zoonoses (PMS-314322) e informar onde está a senha
+
+
+SOBRE A ABA "PAINEL": 
+
+Precisamos de informações gerenciais rápidas, em especial quantos novos casos por agravo foram importados em relação a períodos específicos, com opções de filtros (Ultimo dia, ultima atualização ou especificar data)
+
+Tambem precisamos visualizar quantos casos pendentes, cconcluidos, cancelados e em andamento, conforme seleção de filtro. 
+
+Sugira outras opções de visualizações gerenciais que julgar necessarias
+
+
+As tabelas existentes atualmente já estão contempladas em parte na aba HISTÓRICO" e portanto podem serem removidas da aba "Painel"
+
+
+SOBRE A ABA "HISTÓRICO":
+
+Atualizar os dados historicos conforme imagem anexa (já tinha mandado o arquivo plan_notif_agravos.ods com estes dados)
+
+
+SOBRE A ABA "ESPOROTRICOSE"
+
+adicionar uma coluna ao fim com rótulo de RedCap para inserção do código gerado a cada inserção neste sistema que em algum dia conversaremos sobre, não tendo nada a haver com códigos de mapeamento semantico.
+
+Portanto, desconsidere esta frase: "A imagem de RedCap é um mapeamento de códigos semânticos com colunas de grupo, subpergunta, código LimeSurvey, coluna legada, tipo SQL e referência."
+
+Seguem alguns exemplos de códigos gerados
+D7AANRCR
+PXEM8RL8
+APX4EK9P
+MWTKJNPH
+4N9W7PEN
+MTAJRF3T
+WMFT834K
+HR88DFDM
+8DRX87AK
+D9NNAEPC
+MHRX4FME
+PEJ3H7DA
+
+
+SOBRE A ABA "LOG"
+
+Adicionar informações sobre os anexos
+
+
+
+
+*** Para as abas dos 4 agravos:
+
+a) na coluna "STATUS DO ACOMPANHAMENTO", criar uma escala de cor, tipo semaforo, para pendente em tom de vermelho, em andamento amarelo, concluido, verde e cancelado cinza mais escuro
+
+b) Para as colunas de "Nº DE CONTROLE" incluir os prefixos "Espo", "Raiva, "Lepto" e "Leish" conforme já orientado anteriormente, respeitando a aba que pertence
+(TIRAR PRINT)
+
+
+*** Crie um repositorio no github na conta https://github.com/geosessorocaba-cmyk para fazermos versionamento e podermos dar continuidade no projeto em outras maquinas 
+
+
+*** verifique se após os horários programados para o bot rodar, além de baixar os arquivos, eles estão sendo sincronizados automaticamente com a planilha. Caso não esteja, inclua este passo na rotina programada
+
+
+
+----------------------------------------------------------------------------------
+
+Estamos com ótimos resultados!
+
+Na aba "Painel" e "LEIA-ME" precisamos de melhorias no layout. Temos algumas células cujo texto não cabem ou estão com quebras de palavras por limite da largura da coluna e não é possível expandi-las sem senha
+
+Sobre o "PAINEL" ainda:
+O filtro de períodos não ficou claro para o usuário, necessitando de ajustes. 
+
+*** Precisamos de uma nova implementação. Vide exemplo do print, onde temos uma aba com a máscara de laudo. Alí temos uma caixa de seleção que selecionamos uma dada notificação e por procv traz os dados da linha para os devidos campos para salvarmos em pdf já com o nome do arquivo estruturado (NOT "agravo" "xx"/ano - "nome do animal") em uma pasta exclusiva para laudos. 
+
+Da mesma forma, precisamos de uma outra nova aba com o mesmo mecanismo de seleção da notificação para uma máscara que gere um pdf que possamos salvar e enviar por email com as informações presentes na planilha ods de cada agravo para salvar e enviar ao canil para início dos procedimentos operacionais
+
+Provavelmente o acesso ao T: retornou e poderá salvar todo o conjunto lá e espelhar para o git
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
